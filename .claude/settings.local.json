@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat /Users/muhammadilma/Documents/Portfolio/images/coffee-cup_18107514.json | python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); print\\('valid, keys:', list\\(data.keys\\(\\)\\)[:5]\\)\")",
+      "Bash(cat /Users/muhammadilma/Documents/Portfolio/images/coffee-cup_18107514.json | python3 -c \"import sys; print\\(sys.stdin.read\\(\\).strip\\(\\)\\)\")",
+      "mcp__figma__generate_figma_design",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_screenshot"
+    ]
+  }
+}

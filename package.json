@@ -1,0 +1,7 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

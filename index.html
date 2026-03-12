@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gilang — Product Designer</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F4F6F7;
+      --surface: #DDE6EA;
+      --surface-hover: #d0dce1;
+      --border: #D2DCE0;
+      --text: #1a1916;
+      --text-secondary: #6b6760;
+      --text-tertiary: #9b9790;
+      --accent: #1E61F1;
+      --accent-hover: #1550d4;
+      --card-bg: #E9EFF2;
+      --nav-bg: rgba(244,246,247,0.88);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE SYSTEM ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1E61F1;
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN WRAPPER ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 130px;
+      padding-bottom: 80px;
+    }
+    .hero-title {
+      font-size: clamp(26px, 3.2vw, 40px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.022em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-weight: 400;
+    }
+    .hero-gojek-link {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(107,103,96,0.4);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.15s;
+    }
+    .hero-gojek-link:hover {
+      text-decoration-color: var(--text-secondary);
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-size: 17px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-section {
+      padding-bottom: 80px;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      border-color: #c4bfb7;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .card-thumbnail {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Thumbnail illustrations */
+    .thumb-compensation {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .thumb-topbar {
+      height: 28px;
+      background: var(--bg);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 6px;
+    }
+    .thumb-topbar-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .thumb-topbar-text { height: 5px; width: 60px; background: var(--border); border-radius: 2px; flex: 1; }
+    .thumb-body { flex: 1; display: grid; grid-template-columns: 80px 1fr; gap: 8px; }
+    .thumb-sidebar { background: var(--bg); border-radius: 4px; padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+    .thumb-sidebar-item { height: 5px; border-radius: 2px; background: var(--border); }
+    .thumb-sidebar-item.sel { background: var(--accent); opacity: 0.5; width: 70%; }
+    .thumb-content { display: flex; flex-direction: column; gap: 6px; }
+    .thumb-row { display: flex; gap: 6px; }
+    .thumb-field { height: 20px; background: var(--bg); border-radius: 3px; border: 1px solid var(--border); flex: 1; }
+    .thumb-status { display: flex; gap: 5px; }
+    .thumb-chip { height: 16px; border-radius: 8px; background: var(--border); }
+    .thumb-chip.active { background: rgba(30,97,241,0.12); }
+    .thumb-submit { height: 24px; width: 80px; background: var(--text); border-radius: 4px; margin-top: auto; }
+
+    .thumb-inbox {
+      width: 100%; height: 100%; padding: 16px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .thumb-tabs { display: flex; gap: 3px; margin-bottom: 4px; }
+    .thumb-tab { height: 22px; border-radius: 4px; background: var(--border); }
+    .thumb-tab.on { background: var(--bg); border: 1px solid var(--border); padding: 0 8px; display: flex; align-items: center; }
+    .thumb-tab.on span { height: 5px; width: 30px; background: var(--text-secondary); border-radius: 2px; }
+    .thumb-order { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg); border-radius: 4px; }
+    .thumb-order.new { border: 1px solid rgba(30,97,241,0.2); background: rgba(30,97,241,0.04); }
+    .thumb-odot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .thumb-odot.g { background: #4ade80; }
+    .thumb-odot.y { background: #fbbf24; }
+    .thumb-oname { height: 5px; width: 70px; background: var(--border); border-radius: 2px; flex: 1; }
+    .thumb-obadge { height: 16px; width: 36px; border-radius: 8px; background: rgba(74,222,128,0.2); }
+    .thumb-obadge.p { background: rgba(251,191,36,0.2); }
+
+    .thumb-edit {
+      width: 100%; height: 100%; padding: 16px; display: grid; grid-template-columns: 1fr 72px; gap: 8px;
+    }
+    .thumb-items { display: flex; flex-direction: column; gap: 5px; }
+    .thumb-item { display: flex; align-items: center; gap: 7px; padding: 6px; background: var(--bg); border-radius: 4px; }
+    .thumb-item.removed { opacity: 0.4; background: rgba(239,68,68,0.05); }
+    .thumb-iimg { width: 22px; height: 22px; border-radius: 2px; background: var(--border); flex-shrink: 0; }
+    .thumb-iinfo { flex: 1; }
+    .thumb-iname { height: 5px; width: 60px; background: var(--border); border-radius: 2px; margin-bottom: 4px; }
+    .thumb-isub { height: 4px; width: 40px; background: var(--surface); border-radius: 2px; }
+    .thumb-qty { display: flex; align-items: center; gap: 4px; }
+    .thumb-qbtn { width: 16px; height: 16px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-secondary); }
+    .thumb-qnum { font-size: 10px; color: var(--text-secondary); width: 10px; text-align: center; }
+    .thumb-sum { background: var(--bg); border-radius: 4px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .thumb-srow { display: flex; justify-content: space-between; }
+    .thumb-sl { height: 4px; width: 30px; background: var(--border); border-radius: 2px; }
+    .thumb-sv { height: 4px; width: 24px; background: var(--border); border-radius: 2px; }
+    .thumb-sdiv { height: 1px; background: var(--border); }
+    .thumb-stl { height: 5px; width: 24px; background: var(--text-secondary); border-radius: 2px; opacity: 0.4; }
+    .thumb-stv { height: 5px; width: 30px; background: rgba(30,97,241,0.4); border-radius: 2px; }
+    .thumb-sbtn { margin-top: auto; height: 22px; background: var(--text); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 8px; color: white; letter-spacing: 0.04em; }
+
+    .card-info {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      margin-bottom: 4px;
+      letter-spacing: 0.01em;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: auto;
+      padding-top: 12px;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .card-link:hover { color: var(--accent-hover); }
+    .card-link svg { transition: transform 0.15s; }
+    .card-link:hover svg { transform: translateX(3px); }
+
+    /* ── ABOUT ── */
+    .about-section {
+      padding-bottom: 80px;
+      padding-top: 20px;
+    }
+    .about-section .section-title { margin-top: 40px; }
+
+    /* Bento grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      margin-top: 32px;
+      min-height: 460px;
+    }
+    .bento-cell {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .bento-intro {
+      grid-column: 1; grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+    }
+    .bento-intro p {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+    }
+    .bento-intro p em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .bento-fulfilling-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .bento-fulfilling-group p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+    .bento-resume-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .bento-resume-inline:hover { color: var(--accent-hover); }
+    .bento-resume-inline svg { transition: transform 0.15s; }
+    .bento-resume-inline:hover svg { transform: translateX(3px); }
+    .bento-personal {
+      grid-column: 2; grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 28px;
+    }
+    .bento-personal .bento-icon {
+      width: 64px;
+      height: 64px;
+    }
+    .bento-personal p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+    .bento-photo {
+      grid-column: 3; grid-row: 1 / 3;
+      padding: 0;
+    }
+    .bento-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .resume-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+    .resume-link:hover { color: var(--accent-hover); }
+
+    /* ── EXPERIENCE ── */
+    .experience-section {
+      padding-bottom: 80px;
+      padding-top: 20px;
+    }
+    .experience-section .section-title { margin-top: 40px; }
+
+    /* Timeline — horizontal */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .timeline-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      min-height: 180px;
+    }
+    .timeline-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .timeline-year {
+      font-size: 11px;
+      color: #9b9790;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.44px;
+    }
+    .timeline-role {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .timeline-link {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .timeline-link:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--text-secondary);
+    }
+
+
+    /* ── MORE WORK ── */
+    .more-section {
+      padding-bottom: 80px;
+    }
+    .more-section .section-title { margin-top: 40px; }
+    .more-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .more-item {
+      aspect-ratio: 4/3;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .more-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+    .more-placeholder-icon {
+      width: 36px;
+      height: 36px;
+      border: 1.5px dashed var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .more-item-label {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Decorative more-work items */
+    .more-item-1 { background: linear-gradient(135deg, #e4ecf0 0%, #d5e2e8 100%); }
+    .more-item-2 { background: linear-gradient(135deg, #e2eaee 0%, #d2dee4 100%); }
+    .more-item-3 { background: linear-gradient(135deg, #e5edf1 0%, #d6e3e8 100%); }
+    .more-item-4 { background: linear-gradient(135deg, #e0e9ed 0%, #d0dce2 100%); }
+    .more-item-5 { background: linear-gradient(135deg, #e6edf1 0%, #d8e4e9 100%); }
+    .more-item-6 { background: linear-gradient(135deg, #e3ebef 0%, #d4e0e6 100%); }
+    .more-inner-ui {
+      width: 80%;
+      height: 65%;
+      background: rgba(255,255,255,0.6);
+      border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+    }
+    .ui-bar { height: 6px; border-radius: 2px; background: rgba(0,0,0,0.1); }
+    .ui-bar.short { width: 50%; }
+    .ui-bar.accent { background: rgba(30,97,241,0.3); }
+    .ui-grid-mock { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; flex: 1; }
+    .ui-cell { background: rgba(0,0,0,0.05); border-radius: 3px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #E8EEF2;
+      padding: 0;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-name {
+      font-size: 13px;
+      color: #3a4f5a;
+      font-weight: 400;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: #1a3a47;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 5px;
+      transition: color 0.15s, background 0.15s;
+      font-weight: 500;
+    }
+    .footer-links a:hover {
+      color: #000;
+      background: rgba(0,0,0,0.08);
+    }
+    .footer-sep { color: #9ab0bc; font-size: 13px; }
+
+    /* ── CASE STUDY PAGE ── */
+    .case-page {
+      padding-top: 80px;
+      padding-bottom: 80px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    /* Break hero thumb and image placeholders out to full viewport width */
+    .case-hero-thumb,
+    .case-image-placeholder {
+      width: 100vw;
+      margin-left: calc(-1 * (50vw - 50%));
+      position: relative;
+    }
+    .case-hero-thumb {
+      aspect-ratio: 16/7;
+      background: var(--card-bg);
+      border: none;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .case-hero-thumb > div {
+      width: 100%;
+      height: 100%;
+    }
+    .case-heading {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 500;
+      letter-spacing: -0.022em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .case-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+    .meta-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .case-section-header {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 10px;
+      margin-top: 36px;
+    }
+    .case-body {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .case-body + .case-body { margin-top: 16px; }
+    .case-image-placeholder {
+      aspect-ratio: 16/9;
+      background: var(--card-bg);
+      border: none;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      margin-top: 32px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: 13px;
+    }
+    .case-image-placeholder svg { opacity: 0.4; }
+    .case-callout {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+    .case-callout-label {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .case-callout-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    /* Related cases at bottom */
+    .case-related {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .case-related-label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .case-related-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* General scroll-triggered fade-up */
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-play-state: paused;
+    }
+    .fade-up.d1 { animation-delay: 0.05s; }
+    .fade-up.d2 { animation-delay: 0.15s; }
+    .fade-up.d3 { animation-delay: 0.25s; }
+    .fade-up.d4 { animation-delay: 0.35s; }
+
+    .hero-br { display: block; }
+    /* Hero sequence — plays immediately on load */
+    .hero-line-1 {
+      display: inline;
+      opacity: 0;
+      font-weight: 400;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: 0.1s;
+    }
+    .hero-line-2 { display: inline; }
+    .hero-sent {
+      display: inline;
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-sent-1 { animation-delay: 0.9s; }
+    /* Selected work appears 0.4s after hero-sent-1 finishes (0.9 + 0.6 + 0.4 = 1.9s) */
+    .hero-seq-1 {
+      animation-delay: 1.9s !important;
+    }
+    .fade-up.d1.hero-cards { animation-delay: 2.0s !important; }
+    .fade-up.d2.hero-cards { animation-delay: 2.15s !important; }
+    .fade-up.d3.hero-cards { animation-delay: 2.3s !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .nav-inner { padding: 0 20px; }
+      main { padding: 0 20px; }
+      .hero-br { display: none; }
+      .footer-inner { padding: 28px 20px; flex-direction: column; gap: 16px; text-align: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .more-grid { grid-template-columns: 1fr; }
+      .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; min-height: unset; }
+      .bento-photo { grid-column: 1; grid-row: auto; height: 280px; }
+      .bento-intro { grid-column: 1; grid-row: auto; min-height: 400px; justify-content: space-between; }
+      .bento-personal { grid-column: 1; grid-row: auto; }
+      .timeline { grid-template-columns: 1fr; gap: 24px; }
+      .case-related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
+        <img src="images/hero.png" width="40" height="40" style="border-radius:6px;display:block;flex-shrink:0;" alt="Gi logo">
+        Gilang Ilma
+      </a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HOME PAGE ═══════════════ -->
+  <div id="page-home" class="page active">
+    <main>
+
+      <!-- HERO -->
+      <section class="hero">
+        <h1 class="hero-title">
+          <span class="hero-line-1">I design products that help businesses grow.</span><span class="hero-br"></span><span class="hero-line-2"><span class="hero-sent hero-sent-1"> Currently building merchant tools at <a href="https://www.gojek.com/en-id" target="_blank" class="hero-gojek-link">Gojek</a>.</span></span>
+        </h1>
+      </section>
+
+      <!-- WORK -->
+      <section id="work" class="projects-section">
+        <h2 class="section-title fade-up hero-seq-1">Selected work</h2>
+        <div class="projects-grid">
+
+          <!-- Card 1 -->
+          <div class="project-card fade-up d1 hero-cards" onclick="location.href='inbox.html'">
+            <div class="card-thumbnail"><img src="images/card-1.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+            <div class="card-info">
+              <h3 class="card-title">Helping Merchants Manage Orders in Peak-Hours</h3>
+              <p class="card-desc">Increased merchant satisfaction, reduce order errors</p>
+              <a class="card-link" href="inbox.html">
+                See details
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="project-card fade-up d2 hero-cards" onclick="location.href='compensation.html'">
+            <div class="card-thumbnail"><img src="images/card-2.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+            <div class="card-info">
+              <h3 class="card-title">Making Compensation Request Easy for Merchants</h3>
+              <p class="card-desc">80% reduction of Gojek's compensation expense</p>
+              <a class="card-link" href="compensation.html">
+                See details
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="project-card fade-up d3 hero-cards" onclick="location.href='homepage.html'">
+            <div class="card-thumbnail"><img src="images/card-3.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+            <div class="card-info">
+              <h3 class="card-title">Optimized Merchant's Operations Through Homepage Redesign</h3>
+              <p class="card-desc">Helping merchants track performance, balance, and key actions at a glance</p>
+              <a class="card-link" href="homepage.html">
+                See details
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="about-section">
+        <h2 class="section-title">About me</h2>
+        <div class="bento-grid">
+
+          <!-- Intro + Fulfilling + Resume CTA -->
+          <div class="bento-cell bento-intro">
+            <p>I am a product designer designing mobile and web products for over <em>5 years</em>.</p>
+            <div class="bento-fulfilling-group">
+              <p>What I find most fulfilling is helping people work more easily and grow their business. Today, my work supports hundreds of thousands of merchants across Indonesia within Gojek’s ecosystem.</p>
+              <a class="bento-resume-inline" href="https://drive.google.com/file/d/1TCq6pkGlmh0aCKWa-w5OPUAnpc3rPAof/view?usp=sharing" target="_blank">
+                View resume
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Personal -->
+          <div class="bento-cell bento-personal">
+            <div class="bento-icon" id="coffee-lottie"></div>
+            <p>I am a proud father and husband. I also enjoy good coffee and read books.</p>
+          </div>
+
+          <!-- Photo -->
+          <div class="bento-cell bento-photo">
+            <img src="images/fotogilang.png" alt="Gilang Ilma" loading="lazy">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section class="experience-section">
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <span class="timeline-year">2021 - present</span>
+              <p class="timeline-role"><a href="https://www.gojek.com" target="_blank" class="timeline-link">Gojek (GoTo group) · Product Designer</a></p>
+            </div>
+            <p class="timeline-desc">Oversee the end-to-end GoFood merchant experience</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <span class="timeline-year">2019 - 2021</span>
+              <p class="timeline-role"><a href="https://www.doku.com" target="_blank" class="timeline-link">DOKU · UI/UX Designer</a></p>
+            </div>
+            <p class="timeline-desc">Designing B2B tools for a payment gateway platform</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-header">
+              <span class="timeline-year">2019 - present</span>
+              <p class="timeline-role">Freelance designer</p>
+            </div>
+            <p class="timeline-desc">Designing high-converting landing pages that drive business growth</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MORE WORK -->
+      <section class="more-section">
+        <h2 class="section-title">More work</h2>
+        <div class="more-grid">
+          <div class="more-item">
+            <img src="images/case-1.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="MQS">
+          </div>
+          <div class="more-item">
+            <img src="images/case-2.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Social Proof">
+          </div>
+          <div class="more-item">
+            <img src="images/case-3.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Edit Order">
+          </div>
+          <div class="more-item">
+            <img src="images/case-4.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="GFMA Landing Page">
+          </div>
+          <div class="more-item">
+            <img src="images/case-5.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Onyx">
+          </div>
+          <div class="more-item">
+            <img src="images/case-6.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt="BMW">
+          </div>
+        </div>
+              <div class="ui-grid-mock">
+                <div class="ui-cell"></div><div class="ui-cell"></div>
+                <div class="ui-cell"></div><div class="ui-cell"></div>
+              </div>
+            </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-name">Designed &amp; built with Claude 🟠</span>
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="mailto:m.gilangilma@gmail.com">Email</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="https://x.com/gilangilma" target="_blank">X</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════ CASE STUDY: COMPENSATION ═══════════════ -->
+  <div id="page-compensation" class="page">
+    <main>
+      <div class="case-page">
+
+        <!-- Hero thumbnail -->
+        <div class="case-hero-thumb">
+          <div class="thumb-compensation">
+            <div class="thumb-topbar">
+              <div class="thumb-topbar-dot" style="background:#e8504a;width:6px;height:6px;border-radius:50%"></div>
+              <div class="thumb-topbar-dot" style="background:#f5a623;width:6px;height:6px;border-radius:50%"></div>
+              <div class="thumb-topbar-dot" style="background:#27c93f;width:6px;height:6px;border-radius:50%"></div>
+              <div class="thumb-topbar-text"></div>
+            </div>
+            <div class="thumb-body">
+              <div class="thumb-sidebar">
+                <div class="thumb-sidebar-item sel"></div>
+                <div class="thumb-sidebar-item" style="width:85%"></div>
+                <div class="thumb-sidebar-item" style="width:60%"></div>
+                <div class="thumb-sidebar-item" style="width:75%"></div>
+                <div class="thumb-sidebar-item" style="width:50%"></div>
+              </div>
+              <div class="thumb-content">
+                <div class="thumb-status">
+                  <div class="thumb-chip active" style="width:52px"></div>
+                  <div class="thumb-chip" style="width:44px"></div>
+                  <div class="thumb-chip" style="width:30px"></div>
+                </div>
+                <div class="thumb-row"><div class="thumb-field"></div><div class="thumb-field" style="flex:0.5"></div></div>
+                <div class="thumb-row"><div class="thumb-field"></div></div>
+                <div class="thumb-row"><div class="thumb-field" style="height:40px"></div></div>
+                <div class="thumb-submit"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="case-heading">Making Compensation Request Easy for merchants</h1>
+        <div class="case-meta">
+          <div class="meta-item">
+            <p class="meta-label">Role</p>
+            <p class="meta-value">Product Designer</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Team</p>
+            <p class="meta-value">PM, Engineers, Data Analyst</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Duration</p>
+            <p class="meta-value">4 months</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Skills</p>
+            <p class="meta-value">UX Research, Interaction Design, Prototyping</p>
+          </div>
+        </div>
+
+        <h2 class="case-section-header">Overview</h2>
+        <p class="case-body">When merchants experienced order issues — missing items, wrong deliveries, system errors — their only path to compensation was contacting customer support. This created long wait times, unclear resolution timelines, and significant frustration for merchants trying to run their businesses.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Problem</p>
+          <p class="case-callout-text">Merchants had no visibility into their compensation status and were fully dependent on support agents to initiate and resolve claims. Support teams were overloaded, and merchants often gave up on legitimate claims entirely.</p>
+        </div>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add your design screenshots here
+        </div>
+
+        <h2 class="case-section-header">My approach</h2>
+        <p class="case-body">I began with a research sprint — interviewing merchants and shadowing support agents to understand the full compensation lifecycle. We mapped every touchpoint from issue discovery to payment resolution, and identified the moments where merchants lost confidence in the system.</p>
+        <p class="case-body">The design challenge was creating a self-serve flow that gave merchants enough control to feel empowered, while maintaining the guardrails GoFood needed to prevent abuse. I ran multiple rounds of concept testing with active merchants to validate the information architecture.</p>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add flow diagrams or wireframes here
+        </div>
+
+        <h2 class="case-section-header">Key design decisions</h2>
+        <p class="case-body">The core of the solution was a claim tracker with real-time status updates — giving merchants the visibility they were missing. Rather than a generic form, the flow was structured around order context, pulling in relevant order data automatically so merchants didn't have to re-explain what happened.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Outcome</p>
+          <p class="case-callout-text">Add your impact metrics here — ticket deflection rate, merchant satisfaction improvement, resolution time reduction, etc.</p>
+        </div>
+
+
+        <div class="case-related">
+          <p class="case-related-label">OTHER SELECTED WORK</p>
+          <div class="case-related-grid">
+            <div class="project-card" onclick="location.href='inbox.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-inbox">
+                  <div class="thumb-tabs"><div class="thumb-tab on"><span></span></div><div class="thumb-tab" style="width:32px"></div><div class="thumb-tab" style="width:44px"></div></div>
+                  <div class="thumb-order new"><div class="thumb-odot g"></div><div class="thumb-oname"></div><div style="flex:1"></div><div class="thumb-obadge"></div></div>
+                  <div class="thumb-order new"><div class="thumb-odot y"></div><div class="thumb-oname" style="width:90px"></div><div style="flex:1"></div><div class="thumb-obadge p"></div></div>
+                  <div class="thumb-order"><div class="thumb-odot"></div><div class="thumb-oname" style="width:65px"></div><div style="flex:1"></div><div class="thumb-obadge" style="background:rgba(0,0,0,0.06)"></div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Helping Merchants Manage Orders in Peak-Hours</h3>
+                <p class="card-desc">Increased merchant satisfaction, reduce order errors</p>
+                <a class="card-link" href="inbox.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+            <div class="project-card" onclick="location.href='homepage.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-edit">
+                  <div class="thumb-items"><div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">2</div><div class="thumb-qbtn">+</div></div></div><div class="thumb-item removed"><div class="thumb-iimg" style="background:rgba(239,68,68,0.15)"></div><div class="thumb-iinfo"><div class="thumb-iname" style="background:rgba(239,68,68,0.2)"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum" style="color:#ef4444">1</div><div class="thumb-qbtn">+</div></div></div></div>
+                  <div class="thumb-sum"><div class="thumb-srow"><div class="thumb-sl"></div><div class="thumb-sv"></div></div><div class="thumb-sdiv"></div><div class="thumb-srow"><div class="thumb-stl"></div><div class="thumb-stv"></div></div><div class="thumb-sbtn">Confirm</div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Enable Merchants to Edit Ongoing Orders Seamlessly</h3>
+                <p class="card-desc">X% decrease of order cancelations</p>
+                <a class="card-link" href="homepage.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-name">Designed &amp; built with Claude 🧡</span>
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="mailto:m.gilangilma@gmail.com">Email</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="https://x.com/gilangilma" target="_blank">X</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════ CASE STUDY: INBOX ═══════════════ -->
+  <div id="page-inbox" class="page">
+    <main>
+      <div class="case-page">
+
+        <!-- Hero thumbnail -->
+        <div class="case-hero-thumb">
+          <div class="thumb-inbox">
+            <div class="thumb-tabs">
+              <div class="thumb-tab on"><span></span></div>
+              <div class="thumb-tab" style="width:32px"></div>
+              <div class="thumb-tab" style="width:44px"></div>
+              <div class="thumb-tab" style="width:28px"></div>
+            </div>
+            <div class="thumb-order new"><div class="thumb-odot g"></div><div class="thumb-oname"></div><div style="flex:1"></div><div class="thumb-obadge"></div></div>
+            <div class="thumb-order new"><div class="thumb-odot y"></div><div class="thumb-oname" style="width:90px"></div><div style="flex:1"></div><div class="thumb-obadge p"></div></div>
+            <div class="thumb-order"><div class="thumb-odot"></div><div class="thumb-oname" style="width:65px"></div><div style="flex:1"></div><div class="thumb-obadge" style="background:rgba(0,0,0,0.06)"></div></div>
+            <div class="thumb-order"><div class="thumb-odot"></div><div class="thumb-oname" style="width:80px"></div><div style="flex:1"></div><div class="thumb-obadge" style="background:rgba(0,0,0,0.06)"></div></div>
+          </div>
+        </div>
+
+        <h1 class="case-heading">Helping Merchants Manage Orders in Peak-Hours</h1>
+        <div class="case-meta">
+          <div class="meta-item">
+            <p class="meta-label">Role</p>
+            <p class="meta-value">Product Designer</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Team</p>
+            <p class="meta-value">PM, Engineers, Data Analyst</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Duration</p>
+            <p class="meta-value">5 months</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Skills</p>
+            <p class="meta-value">UX Research, Interaction Design, Usability Testing</p>
+          </div>
+        </div>
+
+        <h2 class="case-section-header">Overview</h2>
+        <p class="case-body">The order inbox was the most critical screen in the GoFood merchant app — the place where merchants see, accept, and manage every incoming order. Despite its importance, it hadn't been meaningfully redesigned in years, and merchants were struggling during high-volume periods.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Problem</p>
+          <p class="case-callout-text">Merchants were missing orders, struggling to prioritize, and losing time switching between statuses during peak hours. The interface treated all orders equally, with no visual differentiation for urgency or required action.</p>
+        </div>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add before/after screenshots here
+        </div>
+
+        <h2 class="case-section-header">Research & discovery</h2>
+        <p class="case-body">I visited merchant kitchens during the lunch rush to understand the real conditions — noisy, fast-moving, often with the phone mounted on the wall across the room. The insights fundamentally changed how I thought about visual hierarchy: tap targets, contrast, and information density needed to work at a glance from a distance.</p>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add research artifacts or user journey here
+        </div>
+
+        <h2 class="case-section-header">Solution</h2>
+        <p class="case-body">The redesign introduced a clear status-based tab structure, larger tap targets, color-coded urgency indicators, and a persistent action bar for the most common merchant actions. New orders now surface with clear visual prominence, and the interface gracefully handles the transition between empty, medium, and high-volume states.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Outcome</p>
+          <p class="case-callout-text">Add your impact metrics here — order acceptance rate improvement, missed order reduction, merchant satisfaction scores, etc.</p>
+        </div>
+
+
+        <div class="case-related">
+          <p class="case-related-label">OTHER SELECTED WORK</p>
+          <div class="case-related-grid">
+            <div class="project-card" onclick="location.href='compensation.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-compensation">
+                  <div class="thumb-topbar"><div class="thumb-topbar-dot" style="background:#e8504a;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-dot" style="background:#f5a623;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-dot" style="background:#27c93f;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-text"></div></div>
+                  <div class="thumb-body"><div class="thumb-sidebar"><div class="thumb-sidebar-item sel"></div><div class="thumb-sidebar-item" style="width:85%"></div><div class="thumb-sidebar-item" style="width:60%"></div></div><div class="thumb-content"><div class="thumb-status"><div class="thumb-chip active" style="width:52px"></div><div class="thumb-chip" style="width:44px"></div></div><div class="thumb-row"><div class="thumb-field"></div></div><div class="thumb-row"><div class="thumb-field" style="height:36px"></div></div><div class="thumb-submit"></div></div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Making Compensation Request Easy for merchants</h3>
+                <p class="card-desc">80% reduction of Gojek's compensation expense</p>
+                <a class="card-link" href="compensation.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+            <div class="project-card" onclick="location.href='homepage.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-edit">
+                  <div class="thumb-items"><div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">2</div><div class="thumb-qbtn">+</div></div></div><div class="thumb-item removed"><div class="thumb-iimg" style="background:rgba(239,68,68,0.15)"></div><div class="thumb-iinfo"><div class="thumb-iname" style="background:rgba(239,68,68,0.2)"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum" style="color:#ef4444">1</div><div class="thumb-qbtn">+</div></div></div></div>
+                  <div class="thumb-sum"><div class="thumb-srow"><div class="thumb-sl"></div><div class="thumb-sv"></div></div><div class="thumb-sdiv"></div><div class="thumb-srow"><div class="thumb-stl"></div><div class="thumb-stv"></div></div><div class="thumb-sbtn">Confirm</div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Enable Merchants to Edit Ongoing Orders Seamlessly</h3>
+                <p class="card-desc">X% decrease of order cancelations</p>
+                <a class="card-link" href="homepage.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-name">Designed &amp; built with Claude 🧡</span>
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="mailto:m.gilangilma@gmail.com">Email</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="https://x.com/gilangilma" target="_blank">X</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════ CASE STUDY: EDIT ORDER ═══════════════ -->
+  <div id="page-editorder" class="page">
+    <main>
+      <div class="case-page">
+
+        <!-- Hero thumbnail -->
+        <div class="case-hero-thumb">
+          <div class="thumb-edit">
+            <div class="thumb-items">
+              <div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">2</div><div class="thumb-qbtn">+</div></div></div>
+              <div class="thumb-item removed"><div class="thumb-iimg" style="background:rgba(239,68,68,0.15)"></div><div class="thumb-iinfo"><div class="thumb-iname" style="background:rgba(239,68,68,0.2)"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum" style="color:#ef4444">1</div><div class="thumb-qbtn">+</div></div></div>
+              <div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname" style="width:45px"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">1</div><div class="thumb-qbtn">+</div></div></div>
+            </div>
+            <div class="thumb-sum">
+              <div class="thumb-srow"><div class="thumb-sl"></div><div class="thumb-sv"></div></div>
+              <div class="thumb-srow"><div class="thumb-sl" style="width:24px"></div><div class="thumb-sv"></div></div>
+              <div class="thumb-sdiv"></div>
+              <div class="thumb-srow"><div class="thumb-stl"></div><div class="thumb-stv"></div></div>
+              <div class="thumb-sbtn">Confirm</div>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="case-heading">Enable Merchants to Edit Ongoing Orders Seamlessly</h1>
+        <div class="case-meta">
+          <div class="meta-item">
+            <p class="meta-label">Role</p>
+            <p class="meta-value">Product Designer</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Team</p>
+            <p class="meta-value">PM, Engineers, Data Analyst</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Duration</p>
+            <p class="meta-value">3 months</p>
+          </div>
+          <div class="meta-item">
+            <p class="meta-label">Skills</p>
+            <p class="meta-value">UX Research, Interaction Design, Prototyping</p>
+          </div>
+        </div>
+
+        <h2 class="case-section-header">Overview</h2>
+        <p class="case-body">When an ordered item is unavailable, merchants previously had only one option: cancel the entire order. This hurt merchants (lost revenue, lower ratings), customers (meal disrupted), and GoFood's platform metrics. Edit Order was designed to create a third path — modification.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Problem</p>
+          <p class="case-callout-text">Item unavailability was a significant driver of order cancellations. Merchants had no way to communicate alternatives or adjust orders — leading to the worst possible outcome for everyone involved.</p>
+        </div>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add screenshots of the edit order flow here
+        </div>
+
+        <h2 class="case-section-header">Design challenges</h2>
+        <p class="case-body">The core challenge was designing a flow that was fast enough for real kitchen conditions, while covering the complexity of order modifications — item removal, substitution, quantity changes, and the downstream effects on pricing and customer notification.</p>
+        <p class="case-body">I worked closely with engineering and the customer experience team to define what changes required customer approval, which could be applied automatically, and how to communicate edits back to customers in a way that felt fair and transparent.</p>
+
+        <div class="case-image-placeholder">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Add decision tree or system diagram here
+        </div>
+
+        <h2 class="case-section-header">Solution</h2>
+        <p class="case-body">The final design centered on an inline edit mode within the order detail view — keeping merchants in context rather than jumping to a separate editing screen. Unavailable items were highlighted immediately, and the summary panel updated in real time as changes were made, giving merchants confidence before confirming.</p>
+
+        <div class="case-callout">
+          <p class="case-callout-label">Outcome</p>
+          <p class="case-callout-text">Add your impact metrics here — cancellation rate reduction, order save rate, merchant and customer satisfaction improvement, etc.</p>
+        </div>
+
+
+        <div class="case-related">
+          <p class="case-related-label">OTHER SELECTED WORK</p>
+          <div class="case-related-grid">
+            <div class="project-card" onclick="location.href='compensation.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-compensation">
+                  <div class="thumb-topbar"><div class="thumb-topbar-dot" style="background:#e8504a;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-dot" style="background:#f5a623;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-dot" style="background:#27c93f;width:6px;height:6px;border-radius:50%"></div><div class="thumb-topbar-text"></div></div>
+                  <div class="thumb-body"><div class="thumb-sidebar"><div class="thumb-sidebar-item sel"></div><div class="thumb-sidebar-item" style="width:85%"></div><div class="thumb-sidebar-item" style="width:60%"></div></div><div class="thumb-content"><div class="thumb-status"><div class="thumb-chip active" style="width:52px"></div><div class="thumb-chip" style="width:44px"></div></div><div class="thumb-row"><div class="thumb-field"></div></div><div class="thumb-row"><div class="thumb-field" style="height:36px"></div></div><div class="thumb-submit"></div></div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Making Compensation Request Easy for merchants</h3>
+                <p class="card-desc">80% reduction of Gojek's compensation expense</p>
+                <a class="card-link" href="compensation.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+            <div class="project-card" onclick="location.href='inbox.html'" style="cursor:pointer">
+              <div class="card-thumbnail"><div class="thumb-inbox">
+                  <div class="thumb-tabs"><div class="thumb-tab on"><span></span></div><div class="thumb-tab" style="width:32px"></div><div class="thumb-tab" style="width:44px"></div></div>
+                  <div class="thumb-order new"><div class="thumb-odot g"></div><div class="thumb-oname"></div><div style="flex:1"></div><div class="thumb-obadge"></div></div>
+                  <div class="thumb-order new"><div class="thumb-odot y"></div><div class="thumb-oname" style="width:90px"></div><div style="flex:1"></div><div class="thumb-obadge p"></div></div>
+                  <div class="thumb-order"><div class="thumb-odot"></div><div class="thumb-oname" style="width:65px"></div><div style="flex:1"></div><div class="thumb-obadge" style="background:rgba(0,0,0,0.06)"></div></div></div></div>
+              <div class="card-info">
+                <h3 class="card-title">Helping Merchants Manage Orders in Peak-Hours</h3>
+                <p class="card-desc">Increased merchant satisfaction, reduce order errors</p>
+                <a class="card-link" href="inbox.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-name">Designed &amp; built with Claude 🧡</span>
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="mailto:m.gilangilma@gmail.com">Email</a></li>
+          <span class="footer-sep">·</span>
+          <li><a href="https://x.com/gilangilma" target="_blank">X</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function showCase(id) {
+      showPage(id);
+    }
+
+    function scrollToSection(id) {
+      showPage('home');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    // Set flag when navigating away to a case study page
+    document.querySelectorAll('.project-card, .card-link').forEach(el => {
+      el.addEventListener('click', () => sessionStorage.setItem('fromCaseStudy', '1'));
+    });
+
+    function skipAllAnimations() {
+      document.querySelectorAll('.fade-up, .hero-line-1, .hero-sent').forEach(el => {
+        el.style.animation = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+    }
+
+    // Check if returning from a case study page
+    const skipAnim = sessionStorage.getItem('fromCaseStudy') === '1';
+    if (skipAnim) {
+      sessionStorage.removeItem('fromCaseStudy');
+      skipAllAnimations();
+    } else {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.style.animationPlayState = 'running';
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      document.querySelectorAll('.fade-up').forEach(el => {
+        // hero-seq-1 (section title) and hero-cards fire on load as part of the hero sequence
+        if (el.classList.contains('hero-seq-1') || el.classList.contains('hero-cards')) {
+          el.style.animationPlayState = 'running';
+        } else {
+          el.style.animationPlayState = 'paused';
+          obs.observe(el);
+        }
+      });
+    }
+
+    // Handle browser back button restoring from bfcache
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) skipAllAnimations();
+    });
+  lottie.loadAnimation({
+    container: document.getElementById('coffee-lottie'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    animationData: {"v":"4.8.0","meta":{"g":"LottieFiles AE 3.5.9","a":"","k":"","d":"","tc":""},"fr":60,"ip":0,"op":151,"w":500,"h":500,"nm":"14-coffee","ddd":0,"assets":[{"id":"comp_0","layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Cup","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":25,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":45,"s":[4]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":65,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":85,"s":[4]},{"t":105,"s":[0]}],"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[416.85,234.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":45,"s":[416.85,204.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":65,"s":[416.85,234.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":85,"s":[416.85,204.5,0],"to":[0,0,0],"ti":[0,0,0]},{"t":105,"s":[416.85,234.5,0]}],"ix":2},"a":{"a":0,"k":[307.15,124.8,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"t":140,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 9","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[20.691,20.691],[-20.691,-20.691]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[20.691,-43.427],[-20.691,-68.917]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[20.691,-43.427],[-20.691,-68.917]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[20.691,20.691],[-20.691,-20.691]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[124.191,184.765],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 4","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[13.839,20.878],[-13.839,-20.878]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[13.839,-27.802],[-13.839,-53.522]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[13.839,-27.802],[-13.839,-53.522]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[13.839,20.878],[-13.839,-20.878]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[131.043,144.378],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 5","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[-20.691,20.691],[20.691,-20.691]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[-20.691,-43.427],[20.691,-68.917]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[-20.691,-43.427],[20.691,-68.917]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[-20.691,20.691],[20.691,-20.691]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[165.573,184.765],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 6","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[-16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[-13.839,20.878],[13.839,-20.878]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[-16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[-13.839,-27.802],[13.839,-53.522]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[-16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[-13.839,-27.802],[13.839,-53.522]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[-13.839,20.878],[13.839,-20.878]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[158.721,144.378],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 7","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.793,131.256],[79.882,17.921]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.786,53.8],[79.882,-6.82]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.786,53.8],[79.882,-6.82]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.793,131.256],[79.882,17.921]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[65,85],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 8","np":2,"cix":2,"bm":0,"ix":6,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"t":140,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.709803921569,0.325490196078,0.282352941176,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":3,"cix":2,"bm":0,"ix":7,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"t":140,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.823529411765,0.862745098039,0.992156862745,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":3,"cix":2,"bm":0,"ix":8,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.823529411765,0.862745098039,0.992156862745,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[285.181,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":3,"cix":2,"bm":0,"ix":9,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[140.459,138.205],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":10,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Back","parent":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[147.15,150.8,0],"ix":2},"a":{"a":0,"k":[147.15,150.8,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[477,481],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"st","c":{"a":0,"k":[0.019607843137,0.164705882353,0.458823529412,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":16,"ix":5},"lc":1,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.823529411765,0.862745098039,0.992156862745,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[139.8,137.8],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[44.793,133.301],[148.795,236.799],[253.544,128.551]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[38.295,102.8],[148.795,236.799],[256.798,100.799]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[38.295,102.8],[148.795,236.799],[256.798,100.799]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[44.793,133.301],[148.795,236.799],[253.544,128.551]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":16,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":1,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.823529411765,0.862745098039,0.992156862745,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":3,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,0.13]],"o":[[0,0],[0,0],[0,0],[76.5,0.196]],"v":[[314.8,148.963],[213.55,148.8],[213.55,157.605],[243.051,157.604]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,1]],"o":[[0,0],[0,0],[0,0],[76.5,1.5]],"v":[[315.05,110.55],[213.8,109.3],[213.8,176.8],[243.301,176.798]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,1]],"o":[[0,0],[0,0],[0,0],[76.5,1.5]],"v":[[315.05,110.55],[213.8,109.3],[213.8,176.8],[243.301,176.798]],"c":true}]},{"t":140,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,0.13]],"o":[[0,0],[0,0],[0,0],[76.5,0.196]],"v":[[314.8,148.963],[213.55,148.8],[213.55,157.605],[243.051,157.604]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":16,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.823529411765,0.862745098039,0.992156862745,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 2","np":3,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0}]},{"id":"comp_1","layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Cup","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":25,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":45,"s":[4]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":65,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":85,"s":[4]},{"t":105,"s":[0]}],"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[416.85,234.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":45,"s":[416.85,204.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":65,"s":[416.85,234.5,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":85,"s":[416.85,204.5,0],"to":[0,0,0],"ti":[0,0,0]},{"t":105,"s":[416.85,234.5,0]}],"ix":2},"a":{"a":0,"k":[307.15,124.8,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"t":140,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 9","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[20.691,20.691],[-20.691,-20.691]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[20.691,-43.427],[-20.691,-68.917]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[20.691,-43.427],[-20.691,-68.917]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[20.691,20.691],[-20.691,-20.691]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[124.191,184.765],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 4","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[13.839,20.878],[-13.839,-20.878]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[13.839,-27.802],[-13.839,-53.522]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[13.839,-27.802],[-13.839,-53.522]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[13.839,20.878],[-13.839,-20.878]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[131.043,144.378],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 5","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[-20.691,20.691],[20.691,-20.691]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[-20.691,-43.427],[20.691,-68.917]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-14.078],[0,0]],"v":[[-20.691,-43.427],[20.691,-68.917]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-22.855,0]],"o":[[0,-22.855],[0,0]],"v":[[-20.691,20.691],[20.691,-20.691]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[165.573,184.765],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 6","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[-16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[-13.839,20.878],[13.839,-20.878]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[-16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[-13.839,-27.802],[13.839,-53.522]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[-16.265,4.238]],"o":[[0,-11.562],[0,0]],"v":[[-13.839,-27.802],[13.839,-53.522]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-16.265,6.88]],"o":[[0,-18.771],[0,0]],"v":[[-13.839,20.878],[13.839,-20.878]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[158.721,144.378],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 7","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.793,131.256],[79.882,17.921]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.786,53.8],[79.882,-6.82]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.786,53.8],[79.882,-6.82]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[79.793,131.256],[79.882,17.921]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.20000001496,0.800000059838,0.800000059838,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[65,85],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 8","np":2,"cix":2,"bm":0,"ix":6,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,23.748],[42.263,0],[0,-23.748],[-42.262,0]],"o":[[0,-23.748],[-42.262,0],[0,23.748],[42.263,0]],"v":[[76.522,-42.5],[-0.001,-85.5],[-76.523,-42.5],[-0.001,0.5]],"c":true}]},{"t":140,"s":[{"i":[[0,42.262],[42.263,0],[0,-42.262],[-42.262,0]],"o":[[0,-42.262],[-42.262,0],[0,42.262],[42.263,0]],"v":[[76.522,0],[-0.001,-76.523],[-76.523,0],[-0.001,76.523]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.831372608858,0.419607873056,0.360784313725,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":3,"cix":2,"bm":0,"ix":7,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"t":140,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":3,"cix":2,"bm":0,"ix":8,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[285.181,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":3,"cix":2,"bm":0,"ix":9,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[140.459,138.205],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":10,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Mask","parent":1,"td":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[147.15,150.8,0],"ix":2},"a":{"a":0,"k":[147.15,150.8,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0],[0,6.192],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-6.192],[0,0],[0,0]],"v":[[-32.619,-30.19],[14.419,-30.19],[32.619,-41.4],[14.419,-52.61],[-32.619,-52.61]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[0,0],[0,10.052],[10.051,0],[0,0]],"o":[[0,0],[10.051,0],[0,-10.052],[0,0],[0,0]],"v":[[-32.619,18.2],[14.419,18.2],[32.619,0],[14.419,-18.2],[-32.619,-18.2]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":14,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[285.181,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,36.672],[59.536,0],[0,-36.672],[-59.536,0]],"o":[[0,-36.672],[-59.536,0],[0,36.672],[59.536,0]],"v":[[107.8,-41.4],[0,-107.8],[-107.8,-41.4],[0,25]],"c":true}]},{"t":140,"s":[{"i":[[0,59.536],[59.536,0],[0,-59.536],[-59.536,0]],"o":[[0,-59.536],[-59.536,0],[0,59.536],[59.536,0]],"v":[[107.8,0],[0,-107.8],[-107.8,0],[0,107.8]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":14,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[146.3,146.3],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0,0,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[140.459,138.205],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"Back","parent":1,"tt":2,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[147.15,150.8,0],"ix":2},"a":{"a":0,"k":[147.15,150.8,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":0,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[44.793,133.301],[148.795,236.799],[253.544,128.551]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":25,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[38.295,102.8],[148.795,236.799],[256.798,100.799]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":115,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[38.295,102.8],[148.795,236.799],[256.798,100.799]],"c":false}]},{"t":140,"s":[{"i":[[0,0],[-122.938,-0.639],[0,0]],"o":[[0,0],[117.061,-2.261],[0,0]],"v":[[44.793,133.301],[148.795,236.799],[253.544,128.551]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":16,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":1,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,0.13]],"o":[[0,0],[0,0],[0,0],[76.5,0.196]],"v":[[314.8,148.963],[213.55,148.8],[213.55,157.605],[243.051,157.604]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,1]],"o":[[0,0],[0,0],[0,0],[76.5,1.5]],"v":[[315.05,110.55],[213.8,109.3],[213.8,176.8],[243.301,176.798]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,1]],"o":[[0,0],[0,0],[0,0],[76.5,1.5]],"v":[[315.05,110.55],[213.8,109.3],[213.8,176.8],[243.301,176.798]],"c":true}]},{"t":140,"s":[{"i":[[0,0],[0,0],[0,0],[-1.5,0.13]],"o":[[0,0],[0,0],[0,0],[76.5,0.196]],"v":[[314.8,148.963],[213.55,148.8],[213.55,157.605],[243.051,157.604]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":16,"ix":5,"x":"var $bm_rt;\n$bm_rt = comp('14-coffee').layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 2","np":3,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[140.459,138.205],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0}]}],"layers":[{"ddd":0,"ind":1,"ty":3,"nm":"Main Stroke width - Color Ctrl","parent":12,"sr":1,"ks":{"o":{"a":0,"k":0,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[-3,-6,0],"ix":2},"a":{"a":0,"k":[50,50,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"ef":[{"ty":5,"nm":"Stroke width","np":3,"mn":"ADBE Slider Control","ix":1,"en":1,"ef":[{"ty":0,"nm":"Slider","mn":"ADBE Slider Control-0001","ix":1,"v":{"a":0,"k":16,"ix":1}}]},{"ty":5,"nm":"Base Color","np":3,"mn":"ADBE Color Control","ix":2,"en":1,"ef":[{"ty":2,"nm":"Color","mn":"ADBE Color Control-0001","ix":1,"v":{"a":0,"k":[0.019607843831,0.164705887437,0.458823531866,1],"ix":1}}]},{"ty":5,"nm":"Highlight","np":3,"mn":"ADBE Color Control","ix":3,"en":1,"ef":[{"ty":2,"nm":"Color","mn":"ADBE Color Control-0001","ix":1,"v":{"a":0,"k":[0.992156863213,0.878431379795,0.745098054409,1],"ix":1}}]}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Smoke 3","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":12,"ix":10},"p":{"a":0,"k":[278,255,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[-32,46]],"o":[[37,-62],[32,-46]],"v":[[2,-90],[13,-229]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":50,"s":[0]},{"t":80,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":42,"s":[0]},{"t":72,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":3,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[-7.065,4.745],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":42,"op":81,"st":42,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"Smoke 2","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":-12,"ix":10},"p":{"a":0,"k":[225,250,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[-32,46]],"o":[[37,-62],[32,-46]],"v":[[2,-90],[13,-229]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":68,"s":[0]},{"t":98,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":60,"s":[0]},{"t":90,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":3,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[-7.065,4.745],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":60,"op":99,"st":60,"bm":0},{"ddd":0,"ind":4,"ty":4,"nm":"Smoke 1","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[250,250,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[-32,46]],"o":[[37,-62],[32,-46]],"v":[[2,-90],[13,-229]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":28,"s":[0]},{"t":58,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":20,"s":[0]},{"t":50,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":3,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[-7.065,4.745],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":20,"op":59,"st":20,"bm":0},{"ddd":0,"ind":5,"ty":4,"nm":"Kinetic 2","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[250,250,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[-66.215,101.182],[-94.987,141.886]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 3","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[-80.75,83.388],[-134.545,91.826]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[-46.976,114.461],[-42.538,159.257]],"c":false},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.568626972273,0.717646998985,0.023529000376,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Highlight')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":8,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":1,"ml":4,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Shape 1","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"tm","s":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":102,"s":[0]},{"t":122,"s":[100]}],"ix":1},"e":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":95,"s":[0]},{"t":115,"s":[100]}],"ix":2},"o":{"a":0,"k":0,"ix":3},"m":1,"ix":4,"nm":"Trim Paths 1","mn":"ADBE Vector Filter - Trim","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[-14.541,-0.795],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false}],"ip":95,"op":123,"st":-10,"bm":0},{"ddd":0,"ind":6,"ty":4,"nm":"Mask","td":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[257.274,255.194,0],"ix":2},"a":{"a":0,"k":[171.75,171.75,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0.466,0],[18.001,124.182],[0,-54.43],[-94.717,0],[-29.577,51.553]],"o":[[-129.17,0],[-39.546,31.418],[0,94.717],[63.697,0],[-0.465,0.003]],"v":[[158.785,66.655],[-95.271,-152.924],[-160.18,-18.576],[11.32,152.924],[160.18,66.646]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.992156922583,0.560784313725,0.003921568627,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[160.429,190.325],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":181,"st":0,"bm":0},{"ddd":0,"ind":7,"ty":0,"nm":"Shadow","tt":1,"refId":"comp_0","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[250,250,0],"ix":2},"a":{"a":0,"k":[250,250,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"w":500,"h":500,"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":8,"ty":0,"nm":"Cup","refId":"comp_1","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[250,250,0],"ix":2},"a":{"a":0,"k":[250,250,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"w":500,"h":500,"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":9,"ty":4,"nm":"Mask","parent":11,"td":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[211.274,209.194,0],"ix":2},"a":{"a":0,"k":[171.75,171.75,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0.466,0],[18.001,124.182],[0,-54.43],[-11.733,-23.216],[-66.927,0],[-29.577,51.553]],"o":[[-129.17,0],[-39.546,31.418],[0,27.79],[28.257,55.911],[63.697,0],[-0.465,0.003]],"v":[[165.785,69.655],[-95.271,-152.924],[-160.18,-18.576],[-155.836,64.677],[11.32,152.924],[167.18,69.646]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.992156922583,0.560784313725,0.003921568627,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[160.429,190.325],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":181,"st":0,"bm":0},{"ddd":0,"ind":10,"ty":4,"nm":"Shadow","tt":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[256,256,0],"ix":2},"a":{"a":0,"k":[210,210,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,94.717],[94.717,0],[0,-94.717],[-94.717,0]],"o":[[0,-94.717],[-94.717,0],[0,94.717],[94.717,0]],"v":[[171.5,0],[0,-171.5],[-171.5,0],[0,171.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,57.99],[94.717,0],[0,-57.99],[-94.717,0]],"o":[[0,-57.99],[-94.717,0],[0,57.99],[94.717,0]],"v":[[171.5,55],[0,-50],[-171.5,55],[0,160]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,57.99],[94.717,0],[0,-57.99],[-94.717,0]],"o":[[0,-57.99],[-94.717,0],[0,57.99],[94.717,0]],"v":[[171.5,55],[0,-50],[-171.5,55],[0,160]],"c":true}]},{"t":140,"s":[{"i":[[0,94.717],[94.717,0],[0,-94.717],[-94.717,0]],"o":[[0,-94.717],[-94.717,0],[0,94.717],[94.717,0]],"v":[[171.5,0],[0,-171.5],[-171.5,0],[0,171.5]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.992156922583,0.560784313725,0.003921568627,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[210,210],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[199.935,205.745],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":11,"ty":4,"nm":"Plate","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[256,256,0],"ix":2},"a":{"a":0,"k":[210,210,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[{"i":[[0,94.717],[94.717,0],[0,-94.717],[-94.717,0]],"o":[[0,-94.717],[-94.717,0],[0,94.717],[94.717,0]],"v":[[171.5,0],[0,-171.5],[-171.5,0],[0,171.5]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,57.99],[94.717,0],[0,-57.99],[-94.717,0]],"o":[[0,-57.99],[-94.717,0],[0,57.99],[94.717,0]],"v":[[171.5,55],[0,-50],[-171.5,55],[0,160]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":115,"s":[{"i":[[0,57.99],[94.717,0],[0,-57.99],[-94.717,0]],"o":[[0,-57.99],[-94.717,0],[0,57.99],[94.717,0]],"v":[[171.5,55],[0,-50],[-171.5,55],[0,160]],"c":true}]},{"t":140,"s":[{"i":[[0,94.717],[94.717,0],[0,-94.717],[-94.717,0]],"o":[[0,-94.717],[-94.717,0],[0,94.717],[94.717,0]],"v":[[171.5,0],[0,-171.5],[-171.5,0],[0,171.5]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0,0,0,1],"ix":3,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Base Color')('Color');"},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":15.4,"ix":5,"x":"var $bm_rt;\n$bm_rt = thisComp.layer('Main Stroke width - Color Ctrl').effect('Stroke width')('Slider');"},"lc":2,"lj":2,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"fl","c":{"a":0,"k":[0.992156922583,0.796078491211,0.313725490196,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[210,210],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[500,500],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":0,"ix":4},"nm":"Rectangle Path 1","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[1,1,1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[199.935,205.745],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":0,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Rectangle 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":151,"st":0,"bm":0},{"ddd":0,"ind":12,"ty":3,"nm":"Zero | troke width - Color Ctrl","sr":1,"ks":{"o":{"a":0,"k":0,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[250,250,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"ip":0,"op":151,"st":0,"bm":0}],"markers":[]}
+  });
+  </script>
+</body>
+</html>
