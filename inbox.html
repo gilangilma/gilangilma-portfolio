@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Inbox — Gilang</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F4F6F7;
+      --surface: #DDE6EA;
+      --surface-hover: #d0dce1;
+      --border: #D2DCE0;
+      --text: #1a1916;
+      --text-secondary: #6b6760;
+      --text-tertiary: #9b9790;
+      --accent: #1E61F1;
+      --accent-hover: #1550d4;
+      --card-bg: #E9EFF2;
+      --nav-bg: rgba(244,246,247,0.88);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE SYSTEM ── */
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1E61F1;
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN WRAPPER ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 130px;
+      padding-bottom: 80px;
+    }
+    .hero-title {
+      font-size: clamp(26px, 3.2vw, 40px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.022em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-weight: 400;
+    }
+    .hero-gojek-link {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(107,103,96,0.4);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.15s;
+    }
+    .hero-gojek-link:hover {
+      text-decoration-color: var(--text-secondary);
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-section {
+      padding-bottom: 80px;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .project-card:hover {
+      border-color: #c4bfb7;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .card-thumbnail {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Thumbnail illustrations */
+    .thumb-compensation {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .thumb-topbar {
+      height: 28px;
+      background: var(--bg);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 6px;
+    }
+    .thumb-topbar-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .thumb-topbar-text { height: 5px; width: 60px; background: var(--border); border-radius: 2px; flex: 1; }
+    .thumb-body { flex: 1; display: grid; grid-template-columns: 80px 1fr; gap: 8px; }
+    .thumb-sidebar { background: var(--bg); border-radius: 4px; padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+    .thumb-sidebar-item { height: 5px; border-radius: 2px; background: var(--border); }
+    .thumb-sidebar-item.sel { background: var(--accent); opacity: 0.5; width: 70%; }
+    .thumb-content { display: flex; flex-direction: column; gap: 6px; }
+    .thumb-row { display: flex; gap: 6px; }
+    .thumb-field { height: 20px; background: var(--bg); border-radius: 3px; border: 1px solid var(--border); flex: 1; }
+    .thumb-status { display: flex; gap: 5px; }
+    .thumb-chip { height: 16px; border-radius: 8px; background: var(--border); }
+    .thumb-chip.active { background: rgba(30,97,241,0.12); }
+    .thumb-submit { height: 24px; width: 80px; background: var(--text); border-radius: 4px; margin-top: auto; }
+
+    .thumb-inbox {
+      width: 100%; height: 100%; padding: 16px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .thumb-tabs { display: flex; gap: 3px; margin-bottom: 4px; }
+    .thumb-tab { height: 22px; border-radius: 4px; background: var(--border); }
+    .thumb-tab.on { background: var(--bg); border: 1px solid var(--border); padding: 0 8px; display: flex; align-items: center; }
+    .thumb-tab.on span { height: 5px; width: 30px; background: var(--text-secondary); border-radius: 2px; }
+    .thumb-order { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg); border-radius: 4px; }
+    .thumb-order.new { border: 1px solid rgba(30,97,241,0.2); background: rgba(30,97,241,0.04); }
+    .thumb-odot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .thumb-odot.g { background: #4ade80; }
+    .thumb-odot.y { background: #fbbf24; }
+    .thumb-oname { height: 5px; width: 70px; background: var(--border); border-radius: 2px; flex: 1; }
+    .thumb-obadge { height: 16px; width: 36px; border-radius: 8px; background: rgba(74,222,128,0.2); }
+    .thumb-obadge.p { background: rgba(251,191,36,0.2); }
+
+    .thumb-edit {
+      width: 100%; height: 100%; padding: 16px; display: grid; grid-template-columns: 1fr 72px; gap: 8px;
+    }
+    .thumb-items { display: flex; flex-direction: column; gap: 5px; }
+    .thumb-item { display: flex; align-items: center; gap: 7px; padding: 6px; background: var(--bg); border-radius: 4px; }
+    .thumb-item.removed { opacity: 0.4; background: rgba(239,68,68,0.05); }
+    .thumb-iimg { width: 22px; height: 22px; border-radius: 2px; background: var(--border); flex-shrink: 0; }
+    .thumb-iinfo { flex: 1; }
+    .thumb-iname { height: 5px; width: 60px; background: var(--border); border-radius: 2px; margin-bottom: 4px; }
+    .thumb-isub { height: 4px; width: 40px; background: var(--surface); border-radius: 2px; }
+    .thumb-qty { display: flex; align-items: center; gap: 4px; }
+    .thumb-qbtn { width: 16px; height: 16px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text-secondary); }
+    .thumb-qnum { font-size: 10px; color: var(--text-secondary); width: 10px; text-align: center; }
+    .thumb-sum { background: var(--bg); border-radius: 4px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .thumb-srow { display: flex; justify-content: space-between; }
+    .thumb-sl { height: 4px; width: 30px; background: var(--border); border-radius: 2px; }
+    .thumb-sv { height: 4px; width: 24px; background: var(--border); border-radius: 2px; }
+    .thumb-sdiv { height: 1px; background: var(--border); }
+    .thumb-stl { height: 5px; width: 24px; background: var(--text-secondary); border-radius: 2px; opacity: 0.4; }
+    .thumb-stv { height: 5px; width: 30px; background: rgba(30,97,241,0.4); border-radius: 2px; }
+    .thumb-sbtn { margin-top: auto; height: 22px; background: var(--text); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 8px; color: white; letter-spacing: 0.04em; }
+
+    .card-info {
+      padding: 16px 18px 18px;
+    }
+    .card-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      margin-bottom: 4px;
+      letter-spacing: 0.01em;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 10px;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .card-link:hover { color: var(--accent-hover); }
+    .card-link svg { transition: transform 0.15s; }
+    .card-link:hover svg { transform: translateX(3px); }
+
+    /* ── ABOUT ── */
+    .about-section {
+      padding-bottom: 80px;
+      padding-top: 20px;
+    }
+    .about-section .section-title { margin-top: 40px; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    .about-intro {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+    .about-intro p + p { margin-top: 16px; }
+    .resume-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 16px;
+      transition: color 0.15s;
+    }
+    .resume-link:hover { color: var(--accent-hover); }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .timeline-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .timeline-year {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-weight: 400;
+    }
+    .timeline-content {}
+    .timeline-role {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .timeline-link {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .timeline-link:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--text-secondary);
+    }
+
+    .resume-link-mobile { display: none; }
+
+    /* ── MORE WORK ── */
+    .more-section {
+      padding-bottom: 80px;
+    }
+    .more-section .section-title { margin-top: 40px; }
+    .more-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .more-item {
+      aspect-ratio: 4/3;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .more-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+    .more-placeholder-icon {
+      width: 36px;
+      height: 36px;
+      border: 1.5px dashed var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .more-item-label {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Decorative more-work items */
+    .more-item-1 { background: linear-gradient(135deg, #e4ecf0 0%, #d5e2e8 100%); }
+    .more-item-2 { background: linear-gradient(135deg, #e2eaee 0%, #d2dee4 100%); }
+    .more-item-3 { background: linear-gradient(135deg, #e5edf1 0%, #d6e3e8 100%); }
+    .more-item-4 { background: linear-gradient(135deg, #e0e9ed 0%, #d0dce2 100%); }
+    .more-item-5 { background: linear-gradient(135deg, #e6edf1 0%, #d8e4e9 100%); }
+    .more-item-6 { background: linear-gradient(135deg, #e3ebef 0%, #d4e0e6 100%); }
+    .more-inner-ui {
+      width: 80%;
+      height: 65%;
+      background: rgba(255,255,255,0.6);
+      border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+    }
+    .ui-bar { height: 6px; border-radius: 2px; background: rgba(0,0,0,0.1); }
+    .ui-bar.short { width: 50%; }
+    .ui-bar.accent { background: rgba(30,97,241,0.3); }
+    .ui-grid-mock { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; flex: 1; }
+    .ui-cell { background: rgba(0,0,0,0.05); border-radius: 3px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #E8EEF2;
+      padding: 0;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-name {
+      font-size: 13px;
+      color: #3a4f5a;
+      font-weight: 400;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: #1a3a47;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 5px;
+      transition: color 0.15s, background 0.15s;
+      font-weight: 500;
+    }
+    .footer-links a:hover {
+      color: #000;
+      background: rgba(0,0,0,0.08);
+    }
+    .footer-sep { color: #9ab0bc; font-size: 13px; }
+
+    /* ── CASE STUDY PAGE ── */
+    .case-page {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+    .case-hero-thumb {
+      width: 100%;
+      height: 587px;
+      border-radius: 10px;
+      margin-bottom: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .case-hero-thumb > div {
+      width: 100%;
+      height: 100%;
+    }
+    .case-heading {
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.022em;
+      line-height: 1.15;
+      color: var(--text);
+    }
+    .case-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .meta-item {}
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.44px;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .case-section-header {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    .case-body {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .case-body + .case-body { margin-top: 16px; }
+    .case-two-col > .case-body { margin-top: 0; }
+    .case-image-placeholder {
+      width: 100%;
+      height: 587px;
+      border-radius: 10px;
+      margin: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: 13px;
+    }
+    .case-image-placeholder svg { opacity: 0.4; }
+
+    /* Two-column layout block */
+    .case-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    /* Content block with stacked header + body */
+    .case-content-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Related cases at bottom */
+    .case-related {
+      padding-top: 33px;
+      border-top: 1px solid var(--border);
+    }
+    .case-related-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+    .case-related-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .fade-up.d1 { animation-delay: 0.05s; }
+    .fade-up.d2 { animation-delay: 0.12s; }
+    .fade-up.d3 { animation-delay: 0.19s; }
+    .fade-up.d4 { animation-delay: 0.26s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .nav-inner { padding: 0 20px; }
+      main { padding: 0 20px; }
+      .footer-inner { padding: 28px 20px; flex-direction: column; gap: 16px; text-align: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .more-grid { grid-template-columns: 1fr; }
+      .resume-link-desktop { display: none; }
+      .resume-link-mobile { display: inline-flex; margin-top: 16px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .case-related-grid { grid-template-columns: 1fr; }
+      .case-two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html" style="cursor:pointer">
+        <img src="images/hero.png" width="40" height="40" style="border-radius:6px;display:block;flex-shrink:0;" alt="Gi logo">
+        Gilang Ilma
+      </a>
+    </div>
+  </nav>
+
+<main>
+  <div class="case-page">
+
+    <!-- 1. Hero image area -->
+    <div class="case-hero-thumb">
+      <img src="images/Hero-inbox.png" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Order Inbox hero">
+    </div>
+
+    <!-- 2. H1 title -->
+    <h1 class="case-heading">Helping Merchants Manage Orders in Peak-Hours</h1>
+
+    <!-- 3. Meta row -->
+    <div class="case-meta">
+      <div class="meta-item">
+        <p class="meta-label">Role</p>
+        <p class="meta-value">Product Designer</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Team</p>
+        <p class="meta-value">PM, Engineers, Data Analyst</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Duration</p>
+        <p class="meta-value">2 months</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Skills</p>
+        <p class="meta-value">UX Research, Interaction Design, Usability Testing</p>
+      </div>
+    </div>
+
+    <!-- 4. Two-column block: Overview | Problem -->
+    <div class="case-two-col">
+      <div class="case-content-block">
+        <h2 class="case-section-header">Overview</h2>
+        <p class="case-body">The order inbox was the most critical screen in the GoFood merchant app — the place where merchants see, accept, and manage every incoming order. Despite its importance, it hadn't been meaningfully redesigned in years, and merchants were struggling during high-volume periods.</p>
+      </div>
+      <div class="case-content-block">
+        <h2 class="case-section-header">Problem</h2>
+        <p class="case-body">The existing inbox lacked visual hierarchy. During peak hours, merchants were missing new orders, confusing statuses, and struggling to prioritize which orders needed immediate action — leading to delays, errors, and merchant frustration.</p>
+      </div>
+    </div>
+
+    <!-- 5. Image placeholder -->
+    <div class="case-image-placeholder">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Add screenshots here
+    </div>
+
+    <!-- 6. Image placeholder -->
+    <div class="case-image-placeholder">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Add screenshots here
+    </div>
+
+    <!-- 7. Solution block -->
+    <div class="case-content-block">
+      <h2 class="case-section-header">Solution</h2>
+      <div class="case-two-col">
+        <p class="case-body">We redesigned the inbox with clear order status indicators, smarter notification patterns, and a streamlined accept flow that reduced the number of taps needed during the busiest moments of a merchant's day.</p>
+        <p class="case-body">We ran usability tests with active GoFood merchants across different restaurant types to validate the design before shipping, iterating on the status labelling and accept gesture based on their feedback.</p>
+      </div>
+    </div>
+
+    <!-- 8. Image placeholder -->
+    <div class="case-image-placeholder">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Add screenshots here
+    </div>
+
+    <!-- 9. Image placeholder -->
+    <div class="case-image-placeholder">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Add screenshots here
+    </div>
+
+    <!-- 10. Two-column block: Outcome | Learning points -->
+    <div class="case-two-col">
+      <div class="case-content-block">
+        <h2 class="case-section-header">Outcome</h2>
+        <p class="case-body">Increased merchant satisfaction scores and a measurable reduction in order errors. The redesign improved response times during peak hours and became the foundation for subsequent GoFood merchant app updates.</p>
+      </div>
+      <div class="case-content-block">
+        <h2 class="case-section-header">Learning points</h2>
+        <p class="case-body">Designing for high-stress, high-speed environments requires ruthless simplicity. Every unnecessary element competes for attention that merchants don't have. Real-context testing is critical — lab settings don't replicate kitchen conditions.</p>
+      </div>
+    </div>
+
+    <!-- 11. Related work section -->
+    <div class="case-related">
+      <p class="case-related-label">Other Selected Work</p>
+      <div class="case-related-grid">
+        <div class="project-card" onclick="location.href='compensation.html'" style="cursor:pointer">
+          <div class="card-thumbnail"><img src="images/card-2.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+          <div class="card-info">
+            <h3 class="card-title">Making Compensation Request Easy for Merchants</h3>
+            <p class="card-desc">80% reduction of Gojek's compensation expense</p>
+            <a class="card-link" href="compensation.html">See details <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+        <div class="project-card" onclick="location.href='homepage.html'" style="cursor:pointer">
+          <div class="card-thumbnail"><img src="images/card-3.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+          <div class="card-info">
+            <h3 class="card-title">Optimized Merchant's Operations Through Homepage Redesign</h3>
+            <p class="card-desc">Helping merchants track performance, balance, and key actions at a glance</p>
+            <a class="card-link" href="homepage.html">See details <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Designed &amp; built with Claude 🧡</span>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
+        <span class="footer-sep">·</span>
+        <li><a href="/cdn-cgi/l/email-protection#026f2c656b6e636c656b6e6f6342656f636b6e2c616d6f">Email</a></li>
+        <span class="footer-sep">·</span>
+        <li><a href="https://x.com/gilangilma" target="_blank">X</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Intersection observer for scroll animations
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.animationPlayState = 'running';
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      obs.observe(el);
+    });
+  </script>
+</body>
+</html>
