@@ -475,13 +475,17 @@
     }
     .case-meta {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       padding: 20px 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .meta-item {}
+    .meta-group {
+      display: flex;
+      gap: 40px;
+    }
+    .meta-item { flex: 1; min-width: 0; }
     .meta-label {
       font-size: 11px;
       text-transform: uppercase;
@@ -507,6 +511,7 @@
       line-height: 1.8;
     }
     .case-body + .case-body { margin-top: 16px; }
+    .case-two-col > .case-body + .case-body { margin-top: 0; }
     .case-image-placeholder {
       width: 100%;
       height: 587px;
@@ -605,21 +610,25 @@
 
     <!-- 3. Meta row -->
     <div class="case-meta">
-      <div class="meta-item">
-        <p class="meta-label">Role</p>
-        <p class="meta-value">Product Designer</p>
+      <div class="meta-group">
+        <div class="meta-item">
+          <p class="meta-label">Company</p>
+          <p class="meta-value">GoTo (Gojek/GoFood Merchants)</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Year</p>
+          <p class="meta-value">2022</p>
+        </div>
       </div>
-      <div class="meta-item">
-        <p class="meta-label">Team</p>
-        <p class="meta-value">PM, Engineers, Legal</p>
-      </div>
-      <div class="meta-item">
-        <p class="meta-label">Duration</p>
-        <p class="meta-value">3 months</p>
-      </div>
-      <div class="meta-item">
-        <p class="meta-label">Skills</p>
-        <p class="meta-value">Service Design, UX Research, Prototyping</p>
+      <div class="meta-group">
+        <div class="meta-item">
+          <p class="meta-label">Role</p>
+          <p class="meta-value">Product Designer</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Team</p>
+          <p class="meta-value">PM, Engineers, UX Researcher, UX Writer, Risk Team, Business Team</p>
+        </div>
       </div>
     </div>
 
@@ -627,11 +636,11 @@
     <div class="case-two-col">
       <div class="case-content-block">
         <h2 class="case-section-header">Overview</h2>
-        <p class="case-body">When merchants experienced order issues — missing items, wrong deliveries, system errors — their only path to compensation was contacting customer support. This created long wait times, unclear resolution timelines, and significant frustration for merchants trying to run their businesses.</p>
+        <p class="case-body">GoFood orders occasionally get cancelled due to driver unavailability or customer cancellations. When this happens through no fault of the merchant, Gojek compensates them. Previously, Gojek proactively paid all non-merchant-initiated cancellations, up to USD $100 million a month, regardless of whether the merchant had actually prepared the food.</p>
       </div>
       <div class="case-content-block">
         <h2 class="case-section-header">Problem</h2>
-        <p class="case-body">The manual support process was a bottleneck. Merchants had no visibility into their claim status, support agents were overwhelmed with repetitive requests, and Gojek had limited ability to detect and prevent fraudulent claims — creating costs and distrust on all sides.</p>
+        <p class="case-body">Because merchants were paid automatically without any action on their part, many weren't even aware compensation existed. This created two compounding problems: Gojek was paying for food that was never wasted, and merchants, uncertain about their financial safety, were delaying food preparation until a driver physically arrived, slowing down the entire order process.</p>
       </div>
     </div>
 
@@ -651,8 +660,8 @@
     <div class="case-content-block">
       <h2 class="case-section-header">Solution</h2>
       <div class="case-two-col">
-        <p class="case-body">We designed a self-serve compensation flow directly within the merchant app. Merchants could submit claims, attach evidence, and track status in real time — eliminating the need to contact support for the vast majority of cases.</p>
-        <p class="case-body">We introduced a structured claim form with contextual eligibility checks, reducing invalid submissions at the source. Built-in validation logic guided merchants toward the right claim type while filtering out ineligible requests automatically.</p>
+        <p class="case-body">We built a self-serve compensation request feature end-to-end. Eligible canceled orders are surfaced clearly on the canceled orders tab with a direct CTA, so merchants always know what they can claim. The request flow itself handles fraud risk inline: merchants select only the menu items they actually prepared, and upload photo proof of the food that was wasted.</p>
+        <p class="case-body">We also made the compensation scheme transparent and predictable throughout: merchants can see the exact amount they will receive and track the progress of their request at every step. Gathering supporting data, aligning stakeholders across risk, business, and legal, and running usability tests informed the design before we refined and shipped the final flow.</p>
       </div>
     </div>
 
@@ -672,11 +681,11 @@
     <div class="case-two-col">
       <div class="case-content-block">
         <h2 class="case-section-header">Outcome</h2>
-        <p class="case-body">80% reduction in Gojek's compensation expense through fraud prevention and claim accuracy. Support tickets for compensation dropped significantly, and merchant satisfaction with the resolution process improved considerably.</p>
+        <p class="case-body">Gojek's compensation expense dropped by 80% as the shift from proactive payment to merchant-initiated claims meant only genuine food-loss cases were reimbursed. Merchants, now confident they would be compensated fairly, started preparing food earlier, reflected in a decrease in driver waiting time and overall order processing time. Feedback showed merchants found the feature useful and the compensation scheme fair.</p>
       </div>
       <div class="case-content-block">
         <h2 class="case-section-header">Learning points</h2>
-        <p class="case-body">Designing for trust requires transparency. Merchants needed to see exactly where their claim stood and why decisions were made. Every opaque step eroded trust, so we progressively disclosed information to reduce anxiety without overwhelming users.</p>
+        <p class="case-body">The core design challenge was holding two opposing forces in balance: making the experience clear and seamless for merchants, while embedding fraud controls and fair compensation calculation into the same flow without it feeling like a burden to merchants. Getting this right required close collaboration with the risk and business teams throughout, not just at the end. The friction that protects the system and the trust that empowers the merchant had to be designed together from the start.</p>
       </div>
     </div>
 

@@ -380,7 +380,7 @@
     .timeline {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 12px;
       margin-top: 32px;
     }
     .timeline-item {
@@ -582,13 +582,18 @@
     }
     .case-meta {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       padding: 20px 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       margin-bottom: 48px;
     }
+    .meta-group {
+      display: flex;
+      gap: 40px;
+    }
+    .meta-item { flex: 1; min-width: 0; }
     .meta-label {
       font-size: 11px;
       color: var(--text-tertiary);
@@ -614,6 +619,7 @@
       line-height: 1.8;
     }
     .case-body + .case-body { margin-top: 16px; }
+    .case-two-col > .case-body + .case-body { margin-top: 0; }
     .case-image-placeholder {
       aspect-ratio: 16/9;
       background: var(--card-bg);
@@ -945,21 +951,25 @@
 
         <h1 class="case-heading">Making Compensation Request Easy for merchants</h1>
         <div class="case-meta">
-          <div class="meta-item">
-            <p class="meta-label">Role</p>
-            <p class="meta-value">Product Designer</p>
+          <div class="meta-group">
+            <div class="meta-item">
+              <p class="meta-label">Company</p>
+              <p class="meta-value">GoTo (Gojek/GoFood Merchants)</p>
+            </div>
+            <div class="meta-item">
+              <p class="meta-label">Year</p>
+              <p class="meta-value">2022</p>
+            </div>
           </div>
-          <div class="meta-item">
-            <p class="meta-label">Team</p>
-            <p class="meta-value">PM, Engineers, Data Analyst</p>
-          </div>
-          <div class="meta-item">
-            <p class="meta-label">Duration</p>
-            <p class="meta-value">4 months</p>
-          </div>
-          <div class="meta-item">
-            <p class="meta-label">Skills</p>
-            <p class="meta-value">UX Research, Interaction Design, Prototyping</p>
+          <div class="meta-group">
+            <div class="meta-item">
+              <p class="meta-label">Role</p>
+              <p class="meta-value">Product Designer</p>
+            </div>
+            <div class="meta-item">
+              <p class="meta-label">Team</p>
+              <p class="meta-value">PM, Engineers, Legal</p>
+            </div>
           </div>
         </div>
 
@@ -1014,8 +1024,8 @@
                   <div class="thumb-items"><div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">2</div><div class="thumb-qbtn">+</div></div></div><div class="thumb-item removed"><div class="thumb-iimg" style="background:rgba(239,68,68,0.15)"></div><div class="thumb-iinfo"><div class="thumb-iname" style="background:rgba(239,68,68,0.2)"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum" style="color:#ef4444">1</div><div class="thumb-qbtn">+</div></div></div></div>
                   <div class="thumb-sum"><div class="thumb-srow"><div class="thumb-sl"></div><div class="thumb-sv"></div></div><div class="thumb-sdiv"></div><div class="thumb-srow"><div class="thumb-stl"></div><div class="thumb-stv"></div></div><div class="thumb-sbtn">Confirm</div></div></div></div>
               <div class="card-info">
-                <h3 class="card-title">Enable Merchants to Edit Ongoing Orders Seamlessly</h3>
-                <p class="card-desc">X% decrease of order cancelations</p>
+                <h3 class="card-title">Optimized Merchant's Operations Through Homepage Redesign</h3>
+                <p class="card-desc">Helping merchants track performance, balance, and key actions at a glance</p>
                 <a class="card-link" href="homepage.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
               </div>
             </div>
@@ -1060,21 +1070,25 @@
 
         <h1 class="case-heading">Helping Merchants Manage Orders in Peak-Hours</h1>
         <div class="case-meta">
-          <div class="meta-item">
-            <p class="meta-label">Role</p>
-            <p class="meta-value">Product Designer</p>
+          <div class="meta-group">
+            <div class="meta-item">
+              <p class="meta-label">Company</p>
+              <p class="meta-value">GoTo (Gojek/GoFood Merchants)</p>
+            </div>
+            <div class="meta-item">
+              <p class="meta-label">Year</p>
+              <p class="meta-value">2023</p>
+            </div>
           </div>
-          <div class="meta-item">
-            <p class="meta-label">Team</p>
-            <p class="meta-value">PM, Engineers, Data Analyst</p>
-          </div>
-          <div class="meta-item">
-            <p class="meta-label">Duration</p>
-            <p class="meta-value">5 months</p>
-          </div>
-          <div class="meta-item">
-            <p class="meta-label">Skills</p>
-            <p class="meta-value">UX Research, Interaction Design, Usability Testing</p>
+          <div class="meta-group">
+            <div class="meta-item">
+              <p class="meta-label">Role</p>
+              <p class="meta-value">Product Designer</p>
+            </div>
+            <div class="meta-item">
+              <p class="meta-label">Team</p>
+              <p class="meta-value">PM, Engineers, UX Researcher, UX Writer</p>
+            </div>
           </div>
         </div>
 
@@ -1126,8 +1140,8 @@
                   <div class="thumb-items"><div class="thumb-item"><div class="thumb-iimg"></div><div class="thumb-iinfo"><div class="thumb-iname"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum">2</div><div class="thumb-qbtn">+</div></div></div><div class="thumb-item removed"><div class="thumb-iimg" style="background:rgba(239,68,68,0.15)"></div><div class="thumb-iinfo"><div class="thumb-iname" style="background:rgba(239,68,68,0.2)"></div><div class="thumb-isub"></div></div><div class="thumb-qty"><div class="thumb-qbtn">−</div><div class="thumb-qnum" style="color:#ef4444">1</div><div class="thumb-qbtn">+</div></div></div></div>
                   <div class="thumb-sum"><div class="thumb-srow"><div class="thumb-sl"></div><div class="thumb-sv"></div></div><div class="thumb-sdiv"></div><div class="thumb-srow"><div class="thumb-stl"></div><div class="thumb-stv"></div></div><div class="thumb-sbtn">Confirm</div></div></div></div>
               <div class="card-info">
-                <h3 class="card-title">Enable Merchants to Edit Ongoing Orders Seamlessly</h3>
-                <p class="card-desc">X% decrease of order cancelations</p>
+                <h3 class="card-title">Optimized Merchant's Operations Through Homepage Redesign</h3>
+                <p class="card-desc">Helping merchants track performance, balance, and key actions at a glance</p>
                 <a class="card-link" href="homepage.html">View case study <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
               </div>
             </div>
@@ -1149,8 +1163,8 @@
     </footer>
   </div>
 
-  <!-- ═══════════════ CASE STUDY: EDIT ORDER ═══════════════ -->
-  <div id="page-editorder" class="page">
+  <!-- REMOVED: Edit Order case study -->
+  <div id="page-editorder" class="page" style="display:none!important">
     <main>
       <div class="case-page">
 
@@ -1174,10 +1188,6 @@
 
         <h1 class="case-heading">Enable Merchants to Edit Ongoing Orders Seamlessly</h1>
         <div class="case-meta">
-          <div class="meta-item">
-            <p class="meta-label">Role</p>
-            <p class="meta-value">Product Designer</p>
-          </div>
           <div class="meta-item">
             <p class="meta-label">Team</p>
             <p class="meta-value">PM, Engineers, Data Analyst</p>

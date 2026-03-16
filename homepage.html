@@ -475,13 +475,17 @@
     }
     .case-meta {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       padding: 20px 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .meta-item {}
+    .meta-group {
+      display: flex;
+      gap: 40px;
+    }
+    .meta-item { flex: 1; min-width: 0; }
     .meta-label {
       font-size: 11px;
       color: var(--text-tertiary);
@@ -507,6 +511,7 @@
       line-height: 1.8;
     }
     .case-body + .case-body { margin-top: 16px; }
+    .case-two-col > .case-body + .case-body { margin-top: 0; }
     .case-image-placeholder {
       width: 100%;
       height: 587px;
@@ -613,21 +618,25 @@
 
     <!-- 3. Meta row -->
     <div class="case-meta">
-      <div class="meta-item">
-        <p class="meta-label">Role</p>
-        <p class="meta-value">Product Designer</p>
+      <div class="meta-group">
+        <div class="meta-item">
+          <p class="meta-label">Company</p>
+          <p class="meta-value">GoTo (Gojek/GoFood Merchants)</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Year</p>
+          <p class="meta-value">2025</p>
+        </div>
       </div>
-      <div class="meta-item">
-        <p class="meta-label">Team</p>
-        <p class="meta-value">PM, Engineers, Data Analyst</p>
-      </div>
-      <div class="meta-item">
-        <p class="meta-label">Duration</p>
-        <p class="meta-value">4 months</p>
-      </div>
-      <div class="meta-item">
-        <p class="meta-label">Skills</p>
-        <p class="meta-value">UX Research, Information Architecture, Prototyping</p>
+      <div class="meta-group">
+        <div class="meta-item">
+          <p class="meta-label">Role</p>
+          <p class="meta-value">Product Designer</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Team</p>
+          <p class="meta-value">PM, Engineers, UX Researcher, UX Writer</p>
+        </div>
       </div>
     </div>
 
@@ -635,11 +644,11 @@
     <div class="case-two-col">
       <div class="case-content-block">
         <h2 class="case-section-header">Overview</h2>
-        <p class="case-body">GoFood merchants rely on the app homepage as their primary command center — yet the existing design buried critical information across multiple screens. Merchants couldn't quickly see their balance, today's performance, or pending actions without navigating deep into the app.</p>
+        <p class="case-body">The homepage is the first and main entry point of the GoFood merchant app. Over time, without clear governance, teams had freely added data points, nudges, and banners to it, making it cluttered and unscalable. What should have been a useful starting point had become just another screen to tap through.</p>
       </div>
       <div class="case-content-block">
         <h2 class="case-section-header">Problem</h2>
-        <p class="case-body">Merchants were missing time-sensitive information — low balance alerts, new order surges, payout status — because the homepage lacked hierarchy. Key actions required too many taps, slowing down operations during peak hours and causing merchants to miss revenue opportunities.</p>
+        <p class="case-body">Key merchant actions were buried deep inside nested entry points. Toggling operational hours required scrolling down to the feature tiles, opening the outlet tile, then finding the toggle. Setting up menu and stock required going even deeper. On top of this, the homepage showed no meaningful performance indicators, leaving merchants with no way to quickly understand how their business was doing or what to act on.</p>
       </div>
     </div>
 
@@ -659,8 +668,8 @@
     <div class="case-solution-block">
       <h2 class="case-section-header">Solution</h2>
       <div class="case-two-col">
-        <p class="case-body">We redesigned the homepage around a dynamic summary card that surfaces today's revenue, active order count, and balance at a glance. A prioritised action tray below it highlights time-sensitive tasks so merchants can act immediately without hunting through menus.</p>
-        <p class="case-body">We ran extensive contextual research with merchants across different business sizes to understand which information was most critical in each moment. The final design adapts its content priority based on the merchant's current trading state.</p>
+        <p class="case-body">We gathered merchant feedback on their homepage pain points and ran competitive benchmarking across direct and indirect competitors to understand how other platforms surface their home screens. This was important because GoFood merchants use other products too, and their expectations are shaped by those experiences.</p>
+        <p class="case-body">The core design decision was shifting the homepage from a feature dumping ground into a central hub for restaurant operations. We surfaced the most-used actions upfront based on usage data, and added essential business metrics (ratings, order funnel, transactions, and balance) so merchants can get a clear read on their performance and take action without diving into sub-pages.</p>
       </div>
     </div>
 
@@ -680,11 +689,11 @@
     <div class="case-two-col">
       <div class="case-content-block">
         <h2 class="case-section-header">Outcome</h2>
-        <p class="case-body">Merchants reported spending significantly less time navigating to find critical information. Time-to-complete key tasks dropped measurably, and the homepage became the most-used entry point for core merchant actions within weeks of launch.</p>
+        <p class="case-body">Merchants responded positively, appreciating that key features were now easier and faster to reach. Feature adoption increased for the actions we brought upfront, confirming that merchants genuinely needed them accessible. We also saw a lift in ads and promo participation, a direct result of surfacing order funnel metrics alongside recommendations to run promotions and ads to improve performance.</p>
       </div>
       <div class="case-content-block">
         <h2 class="case-section-header">Learning points</h2>
-        <p class="case-body">Designing a homepage for diverse users means designing for different mental models and contexts simultaneously. Surfacing everything for everyone creates noise — the real work was identifying the right defaults and progressive disclosure patterns for each merchant segment.</p>
+        <p class="case-body">This project was fulfilling on two levels: it improved the merchant experience and gave us the opportunity to declutter and rethink how information is structured on the app's most visible surface. The work doesn't end at launch though. The next steps are establishing governance so the homepage stays scalable, and exploring how AI can surface rich, personalized insights based on each merchant's own performance data.</p>
       </div>
     </div>
 
