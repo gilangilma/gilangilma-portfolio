@@ -147,9 +147,14 @@
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    }
+    .card-thumbnail img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     /* Thumbnail illustrations */
@@ -458,9 +463,15 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+    }
+    .case-hero-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .case-hero-thumb > div {
       width: 100%;
@@ -528,6 +539,30 @@
       font-size: 13px;
     }
     .case-image-placeholder svg { opacity: 0.4; }
+    .case-image-panel {
+      width: 100%;
+      height: 587px;
+      border-radius: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .case-image-panel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .case-image-caption {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .case-image-caption strong { color: var(--text); }
     .case-two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -582,6 +617,16 @@
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .case-related-grid { grid-template-columns: 1fr; }
       .case-two-col { grid-template-columns: 1fr; }
+      .case-hero-thumb,
+      .case-image-panel { height: auto; }
+      .case-hero-thumb img,
+      .case-image-panel img {
+        position: static;
+        width: 100%;
+        height: auto;
+        object-fit: initial;
+      }
+
     }
   </style>
 </head>
@@ -644,17 +689,21 @@
       </div>
     </div>
 
-    <!-- 5. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
+    <!-- 5. Compensation image 1 -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/Compensation1.png" alt="Compensation request — context">
+      </div>
+      <figcaption class="case-image-caption">Clearly define which orders are eligible for compensation, which are not and why.</figcaption>
+    </figure>
 
-    <!-- 6. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
+    <!-- 6. Compensation image 2 -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/Compensation2.png" alt="Compensation request — flow">
+      </div>
+      <figcaption class="case-image-caption">Select ordered menu to be reimbursed and attach photo proof.</figcaption>
+    </figure>
 
     <!-- 7. Solution block -->
     <div class="case-content-block">
@@ -665,17 +714,13 @@
       </div>
     </div>
 
-    <!-- 8. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
-
-    <!-- 9. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
+    <!-- 8. Compensation image 3 -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/Compensation3.png" alt="Compensation request — solution">
+      </div>
+      <figcaption class="case-image-caption">Compensation progress status.</figcaption>
+    </figure>
 
     <!-- 10. Two-column block: Outcome | Learning points -->
     <div class="case-two-col">

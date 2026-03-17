@@ -151,9 +151,14 @@
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    }
+    .card-thumbnail img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     /* Thumbnail illustrations */
@@ -826,7 +831,7 @@
           <!-- Personal -->
           <div class="bento-cell bento-personal">
             <div class="bento-icon" id="coffee-lottie"></div>
-            <p>I am a proud father and husband. I also enjoy good coffee and read books.</p>
+            <p>You will often find me sipping a fresh cup of coffee, mostly hot cafe latte. I am also a proud father and a loving husband.</p>
           </div>
 
           <!-- Photo -->

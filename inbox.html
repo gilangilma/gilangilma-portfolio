@@ -147,9 +147,14 @@
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    }
+    .card-thumbnail img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     /* Thumbnail illustrations */
@@ -458,13 +463,15 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
     }
-    .case-hero-thumb > div {
+    .case-hero-thumb img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .case-heading {
       font-size: 36px;
@@ -529,6 +536,30 @@
       font-size: 13px;
     }
     .case-image-placeholder svg { opacity: 0.4; }
+    .case-image-panel {
+      width: 100%;
+      height: 587px;
+      border-radius: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .case-image-panel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .case-image-caption {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .case-image-caption strong { color: var(--text); }
 
     /* Two-column layout block */
     .case-two-col {
@@ -588,6 +619,15 @@
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .case-related-grid { grid-template-columns: 1fr; }
       .case-two-col { grid-template-columns: 1fr; }
+      .case-hero-thumb,
+      .case-image-panel { height: auto; }
+      .case-hero-thumb img,
+      .case-image-panel img {
+        position: static;
+        width: 100%;
+        height: auto;
+        object-fit: initial;
+      }
     }
   </style>
 </head>
@@ -608,7 +648,7 @@
 
     <!-- 1. Hero image area -->
     <div class="case-hero-thumb">
-      <img src="images/Hero-inbox.png" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Order Inbox hero">
+      <img src="images/Hero-inbox.png" alt="Order Inbox hero">
     </div>
 
     <!-- 2. H1 title -->
@@ -650,17 +690,21 @@
       </div>
     </div>
 
-    <!-- 5. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
+    <!-- 5. Before state -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/inbox1.png" alt="Before redesign — cluttered order inbox">
+      </div>
+      <figcaption class="case-image-caption"><strong>Before</strong> — Cluttered, more effort to track and comprehend orders</figcaption>
+    </figure>
 
-    <!-- 6. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
-    </div>
+    <!-- 6. After state — order list + details -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/inbox2.png" alt="Redesigned order list and details">
+      </div>
+      <figcaption class="case-image-caption"><strong>After</strong> — Less effort to track orders, more focus on cooking good food</figcaption>
+    </figure>
 
     <!-- 7. Solution block -->
     <div class="case-content-block">
@@ -671,16 +715,27 @@
       </div>
     </div>
 
-    <!-- 8. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
+    <!-- 8. Order details before vs after -->
+    <figure style="display:flex;flex-direction:column;gap:8px;margin:0;">
+      <div class="case-image-panel">
+        <img src="images/inbox3.png" alt="Order details before vs after">
+      </div>
+      <figcaption class="case-image-caption">Order details before vs after</figcaption>
+    </figure>
+
+    <!-- 9. New order states -->
+    <div class="case-image-panel">
+      <img src="images/inbox4.png" alt="New order states">
     </div>
 
-    <!-- 9. Image placeholder -->
-    <div class="case-image-placeholder">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Add screenshots here
+    <!-- 10. Driver states -->
+    <div class="case-image-panel">
+      <img src="images/inbox5.png" alt="Driver and order status states">
+    </div>
+
+    <!-- 11. Special states -->
+    <div class="case-image-panel">
+      <img src="images/inbox6.png" alt="Pin, menu list states">
     </div>
 
     <!-- 10. Two-column block: Outcome | Learning points -->
@@ -700,7 +755,7 @@
       <p class="case-related-label">Other Selected Work</p>
       <div class="case-related-grid">
         <div class="project-card" onclick="location.href='compensation.html'" style="cursor:pointer">
-          <div class="card-thumbnail"><img src="images/card-2.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+          <div class="card-thumbnail"><img src="images/card-2.jpg" width="400" height="300" loading="lazy" alt=""></div>
           <div class="card-info">
             <h3 class="card-title">Making Compensation Request Easy for Merchants</h3>
             <p class="card-desc">80% reduction of Gojek's compensation expense</p>
@@ -708,7 +763,7 @@
           </div>
         </div>
         <div class="project-card" onclick="location.href='homepage.html'" style="cursor:pointer">
-          <div class="card-thumbnail"><img src="images/card-3.jpg" width="400" height="300" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" alt=""></div>
+          <div class="card-thumbnail"><img src="images/card-3.jpg" width="400" height="300" loading="lazy" alt=""></div>
           <div class="card-info">
             <h3 class="card-title">Optimized Merchant's Operations Through Homepage Redesign</h3>
             <p class="card-desc">Helping merchants track performance, balance, and key actions at a glance</p>
