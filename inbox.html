@@ -16,7 +16,7 @@
   <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,16 +32,31 @@
       --accent-hover: #1550d4;
       --card-bg: #E9EFF2;
       --nav-bg: rgba(244,246,247,0.88);
+
+      --font-hero: 36px;
+      --font-body: 17px;
+      --lh-hero: 42px;
+      --lh-body: 28px;
+      --font-hero-mobile: 32px;
+      --lh-hero-mobile: 40px;
+      --ls-hero: -0.02em;
+      --weight-primary: 500;
+      --weight-secondary: 400;
+      --color-primary: var(--text);
+      --color-secondary: var(--text-secondary);
+      --pad-page-x: 40px;
+      --pad-card-x: 18px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
-      color: var(--text);
+      color: var(--color-secondary);
       font-family: 'Inter', sans-serif;
-      font-size: 17px;
-      line-height: 28px;
+      font-size: var(--font-body);
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
       -webkit-font-smoothing: antialiased;
     }
 
@@ -59,19 +74,22 @@
     .nav-inner {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 14px 40px;
+      padding: 14px var(--pad-page-x);
       display: flex;
       align-items: center;
     }
     .nav-logo {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-size: 17px;
-      font-weight: 500;
-      color: var(--text);
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
+      color: var(--accent);
       text-decoration: none;
       cursor: pointer;
+      transition: color 0.15s;
+    }
+    .nav-logo:hover {
+      color: var(--accent-hover);
     }
     .nav-logo-dot {
       width: 8px;
@@ -85,7 +103,7 @@
     main {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 40px;
+      padding: 0 var(--pad-page-x);
     }
 
     /* ── HERO ── */
@@ -94,18 +112,21 @@
       padding-bottom: 80px;
     }
     .hero-title {
-      font-size: 36px;
-      font-weight: 400;
-      line-height: 42px;
-      letter-spacing: 0;
-      color: var(--text);
+      font-size: var(--font-hero);
+      font-weight: var(--weight-primary);
+      line-height: var(--lh-hero);
+      letter-spacing: var(--ls-hero);
+      color: var(--color-primary);
       margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: 0.1s;
     }
     .hero-sub {
-      font-size: 19px;
-      color: var(--text-secondary);
-      line-height: 32px;
-      font-weight: 400;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
     }
     .hero-gojek-link {
       color: inherit;
@@ -120,10 +141,11 @@
 
     /* ── SECTION HEADERS ── */
     .section-title {
-      font-size: 21px;
-      font-weight: 400;
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
       letter-spacing: 0;
-      color: var(--text);
+      line-height: var(--lh-body);
+      color: var(--color-primary);
       margin-bottom: 24px;
     }
 
@@ -237,36 +259,38 @@
     .thumb-sbtn { margin-top: auto; height: 22px; background: var(--text); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 8px; color: white; letter-spacing: 0.04em; }
 
     .card-info {
-      padding: 16px 18px 18px;
+      padding: var(--pad-card-x);
     }
     .card-label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      font-weight: 400;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      font-weight: var(--weight-secondary);
       margin-bottom: 4px;
       letter-spacing: 0;
     }
     .card-title {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 22px;
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
+      color: var(--color-primary);
+      line-height: var(--lh-body);
       margin-bottom: 8px;
     }
     .card-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 24px;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
     }
     .card-link {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      font-size: 15px;
+      font-size: var(--font-body);
       color: var(--accent);
       text-decoration: none;
-      margin-top: 10px;
-      font-weight: 400;
+      margin-top: auto;
+      padding-top: 12px;
+      font-weight: var(--weight-secondary);
       transition: color 0.15s;
     }
     .card-link:hover { color: var(--accent-hover); }
@@ -296,8 +320,8 @@
       gap: 4px;
       color: var(--accent);
       text-decoration: none;
-      font-size: 15px;
-      margin-top: 16px;
+      font-size: var(--font-body);
+      font-weight: var(--weight-secondary);
       transition: color 0.15s;
     }
     .resume-link:hover { color: var(--accent-hover); }
@@ -314,21 +338,23 @@
       gap: 2px;
     }
     .timeline-year {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      font-weight: 400;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      font-weight: var(--weight-secondary);
+      letter-spacing: 0;
     }
     .timeline-content {}
     .timeline-role {
-      font-size: 15px;
-      font-weight: 400;
-      color: var(--text);
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
+      color: var(--color-primary);
       margin-bottom: 2px;
     }
     .timeline-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 24px;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
     }
     .timeline-link {
       color: inherit;
@@ -371,8 +397,9 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      color: var(--text-tertiary);
-      font-size: 12px;
+      color: var(--color-secondary);
+      font-size: var(--font-body);
+      font-weight: var(--weight-secondary);
     }
     .more-placeholder-icon {
       width: 36px;
@@ -388,9 +415,9 @@
       bottom: 10px;
       left: 10px;
       right: 10px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 400;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      font-weight: var(--weight-secondary);
     }
 
     /* Decorative more-work items */
@@ -425,15 +452,15 @@
     .footer-inner {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 32px 40px;
+      padding: 32px var(--pad-page-x);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .footer-name {
-      font-size: 15px;
-      color: #3a4f5a;
-      font-weight: 400;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      font-weight: var(--weight-secondary);
     }
     .footer-links {
       display: flex;
@@ -442,19 +469,19 @@
       list-style: none;
     }
     .footer-links a {
-      font-size: 15px;
-      color: #1a3a47;
+      font-size: var(--font-body);
+      color: var(--color-primary);
       text-decoration: none;
       padding: 4px 10px;
       border-radius: 5px;
       transition: color 0.15s, background 0.15s;
-      font-weight: 400;
+      font-weight: var(--weight-secondary);
     }
     .footer-links a:hover {
       color: #000;
       background: rgba(0,0,0,0.08);
     }
-    .footer-sep { color: #9ab0bc; font-size: 15px; }
+    .footer-sep { color: var(--color-secondary); font-size: var(--font-body); }
 
     /* ── CASE STUDY PAGE ── */
     .case-page {
@@ -482,48 +509,25 @@
       display: block;
     }
     .case-heading {
-      font-size: 36px;
-      font-weight: 500;
-      letter-spacing: 0;
-      line-height: 42px;
-      color: var(--text);
-    }
-    .case-meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .meta-group {
-      display: flex;
-      gap: 40px;
-    }
-    .meta-item { flex: 1; min-width: 0; }
-    .meta-label {
-      font-size: 12px;
-      letter-spacing: 0;
-      color: var(--text-tertiary);
-      margin-bottom: 4px;
-    }
-    .meta-value {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 28px;
+      font-size: var(--font-hero);
+      font-weight: var(--weight-primary);
+      letter-spacing: var(--ls-hero);
+      line-height: var(--lh-hero);
+      color: var(--color-primary);
     }
     .case-section-header {
-      font-size: 21px;
-      font-weight: 600;
-      line-height: 28px;
-      color: var(--text);
-      margin-bottom: 0;
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
+      line-height: var(--lh-body);
+      color: var(--color-primary);
       margin-top: 0;
+      margin-bottom: 0;
     }
     .case-body {
-      font-size: 21px;
-      color: var(--text-secondary);
-      line-height: 34px;
+      font-size: var(--font-body);
+      color: var(--color-secondary);
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
     }
     .case-body + .case-body { margin-top: 16px; }
     .case-two-col > .case-body + .case-body { margin-top: 0; }
@@ -540,18 +544,15 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      color: var(--text-tertiary);
-      font-size: 15px;
+      color: var(--color-secondary);
+      font-size: var(--font-body);
     }
     .case-image-placeholder svg { opacity: 0.4; }
     .case-image-panel {
-      width: 100vw;
-      margin-left: calc(-1 * (50vw - 50%));
-      border-radius: 0;
+      width: 100%;
+      border-radius: 10px;
       background: var(--card-bg);
-      border: none;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      border: 1px solid var(--border);
       overflow: hidden;
     }
     .case-image-panel img {
@@ -560,12 +561,13 @@
       display: block;
     }
     .case-image-caption {
-      font-size: 15px;
-      color: var(--text-secondary);
+      font-size: var(--font-body);
+      color: var(--color-secondary);
       text-align: center;
-      line-height: 24px;
+      line-height: var(--lh-body);
+      font-weight: var(--weight-secondary);
     }
-    .case-image-caption strong { color: var(--text); }
+    .case-image-caption strong { color: var(--color-primary); font-weight: var(--weight-primary); }
 
     /* Two-column layout block */
     .case-two-col {
@@ -587,10 +589,11 @@
       border-top: 1px solid var(--border);
     }
     .case-related-label {
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
+      font-size: var(--font-body);
+      font-weight: var(--weight-primary);
+      color: var(--color-primary);
+      line-height: var(--lh-body);
+      letter-spacing: 0;
       margin-bottom: 16px;
     }
     .case-related-grid {
@@ -615,19 +618,19 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
-      .nav-inner { padding: 0 20px; }
-      main { padding: 0 20px; }
-      .footer-inner { padding: 28px 20px; flex-direction: column; gap: 16px; text-align: center; }
+      :root { --pad-page-x: 20px; }
+      .footer-inner { padding: 28px var(--pad-page-x); flex-direction: column; gap: 16px; text-align: center; }
       .projects-grid { grid-template-columns: 1fr; }
       .more-grid { grid-template-columns: 1fr; }
       .resume-link-desktop { display: none; }
       .resume-link-mobile { display: inline-flex; margin-top: 16px; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .case-related-grid { grid-template-columns: 1fr; }
-      .case-heading { font-size: 32px; line-height: 40px; }
-      .case-body { font-size: 19px; line-height: 30px; }
-      .case-section-header { font-size: 19px; line-height: 26px; }
-      .meta-value { font-size: 15px; line-height: 24px; }
+      .hero-title,
+      .case-heading {
+        font-size: var(--font-hero-mobile);
+        line-height: var(--lh-hero-mobile);
+      }
     }
   </style>
 </head>
@@ -637,7 +640,6 @@
   <nav>
     <div class="nav-inner">
       <a class="nav-logo" href="index.html" style="cursor:pointer">
-        <img src="images/hero.png" width="40" height="40" style="border-radius:6px;display:block;flex-shrink:0;" alt="Gi logo">
         Gilang Ilma
       </a>
     </div>
@@ -653,30 +655,6 @@
 
     <!-- 2. H1 title -->
     <h1 class="case-heading">Helping Merchants Manage Orders in Peak-Hours</h1>
-
-    <!-- 3. Meta row -->
-    <div class="case-meta">
-      <div class="meta-group">
-        <div class="meta-item">
-          <p class="meta-label">Company</p>
-          <p class="meta-value">GoTo (Gojek/GoFood Merchants)</p>
-        </div>
-        <div class="meta-item">
-          <p class="meta-label">Year</p>
-          <p class="meta-value">2023</p>
-        </div>
-      </div>
-      <div class="meta-group">
-        <div class="meta-item">
-          <p class="meta-label">Role</p>
-          <p class="meta-value">Product Designer</p>
-        </div>
-        <div class="meta-item">
-          <p class="meta-label">Team</p>
-          <p class="meta-value">PM, Engineers, UX Researcher, UX Writer</p>
-        </div>
-      </div>
-    </div>
 
     <!-- 4. Two-column block: Overview | Problem -->
     <div class="case-two-col">
@@ -752,7 +730,7 @@
 
     <!-- 11. Related work section -->
     <div class="case-related">
-      <p class="case-related-label">Other Selected Work</p>
+      <p class="case-related-label">Other selected work</p>
       <div class="case-related-grid">
         <div class="project-card" onclick="location.href='compensation.html'" style="cursor:pointer">
           <div class="card-thumbnail"><img src="images/card-2.jpg" width="400" height="300" loading="lazy" alt=""></div>
@@ -778,7 +756,7 @@
 
   <footer>
     <div class="footer-inner">
-      <span class="footer-name">Designed &amp; built with Claude 🧡</span>
+      <span class="footer-name">Designed &amp; built by Gilang</span>
       <ul class="footer-links">
         <li><a href="https://www.linkedin.com/in/gilang-ilma/" target="_blank">LinkedIn</a></li>
         <span class="footer-sep">·</span>
